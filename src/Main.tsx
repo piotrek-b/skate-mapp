@@ -1,6 +1,9 @@
 import React from 'react';
-import { Container, Header, View, Button, Icon, Fab } from 'native-base';
+import { Container, Header, View } from 'native-base';
 import { StyleSheet } from 'react-native';
+
+import Map from './map/Map';
+import FabButton from './FabButton';
 
 const styles = StyleSheet.create({
   view: {
@@ -21,29 +24,12 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const [active, setActive] = React.useState(false);
   return (
     <Container>
       <Header />
       <View style={styles.view}>
-        <Fab
-          active={active}
-          direction="up"
-          style={styles.fab}
-          position="bottomRight"
-          onPress={() => setActive(!active)}
-        >
-          <Icon name="share" />
-          <Button style={styles.whatsapp}>
-            <Icon name="logo-whatsapp" />
-          </Button>
-          <Button style={styles.facebook}>
-            <Icon name="logo-facebook" />
-          </Button>
-          <Button disabled style={styles.mail}>
-            <Icon name="mail" />
-          </Button>
-        </Fab>
+        <FabButton />
+        <Map />
       </View>
     </Container>
   );
