@@ -1,24 +1,37 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
+import { AppLoading } from 'expo';
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
 
 import store from './src/store';
+import Main from './src/Main';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+export default () => {
+  const [isReady, setIsReady] = useState(false);
+  useEffect(() => {
+    const callback = async () => {
+      await Font.loadAsync({
+        // eslint-disable-next-line global-require
+        Roboto: require('native-base/Fonts/Roboto.ttf'),
+        // eslint-disable-next-line global-require
+        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+        ...Ionicons.font
+      });
+
+      setIsReady(true);
+    };
+
+    callback();
+  }, []);
+
+  if (!isReady) {
+    return <AppLoading />;
   }
-});
 
-export default function App() {
   return (
     <Provider store={store}>
-      <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
-      </View>
+      <Main />
     </Provider>
   );
-}
+};
