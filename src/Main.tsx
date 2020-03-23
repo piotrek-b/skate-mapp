@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Header, View } from 'native-base';
+import { Container, View } from 'native-base';
 import { StyleSheet } from 'react-native';
 
 import Map from './map/Map';
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
 export default () => {
   return (
     <Container>
-      <Header />
       <View style={styles.view}>
         <FabButton />
         <Map />

@@ -3,9 +3,14 @@ import { Provider } from 'react-redux';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import 'react-native-gesture-handler';
 
 import store from './src/store';
 import Main from './src/Main';
+
+const Stack = createStackNavigator();
 
 export default () => {
   const [isReady, setIsReady] = useState(false);
@@ -31,7 +36,11 @@ export default () => {
 
   return (
     <Provider store={store}>
-      <Main />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Main" component={Main} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 };
