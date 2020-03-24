@@ -20,7 +20,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default () => {
+interface IFabButtonProps {
+  onClick: () => void;
+}
+
+export default ({ onClick }: IFabButtonProps) => {
   const [active, setActive] = useState(false);
   return (
     <Fab
@@ -31,7 +35,7 @@ export default () => {
       onPress={() => setActive(!active)}
     >
       <Icon name="star" />
-      <Button style={styles.whatsapp}>
+      <Button onPress={onClick} style={styles.whatsapp}>
         <Icon name="logo-whatsapp" />
       </Button>
       <Button style={styles.facebook}>

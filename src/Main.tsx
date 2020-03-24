@@ -1,9 +1,17 @@
 import React from 'react';
 import { Container, View } from 'native-base';
 import { StyleSheet } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import Map from './map/Map';
 import FabButton from './FabButton';
+import { RootStackParamList } from './types';
+
+type MainScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
+
+interface IFabButtonProps {
+  navigation: MainScreenNavigationProp;
+}
 
 const styles = StyleSheet.create({
   view: {
@@ -23,11 +31,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default () => {
+export default ({ navigation }: IFabButtonProps) => {
   return (
     <Container>
       <View style={styles.view}>
-        <FabButton />
+        <FabButton onClick={() => navigation.navigate('List')} />
         <Map />
       </View>
     </Container>
