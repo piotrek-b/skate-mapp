@@ -5,6 +5,7 @@ import * as Permissions from 'expo-permissions';
 import { Dimensions, StyleSheet } from 'react-native';
 
 import UserPositionMarker from './UserPositionMarker';
+import SpotsMarkers from './SpotsMarkers';
 import mapStyle from './mapStyle.json';
 
 const styles = StyleSheet.create({
@@ -48,6 +49,7 @@ export default () => {
       }}
     >
       <UserPositionMarker />
+      <SpotsMarkers />
     </MapView>
   );
 };

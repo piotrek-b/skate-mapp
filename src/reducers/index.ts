@@ -1,5 +1,15 @@
-export interface IState {}
+import { combineReducers } from 'redux';
 
-export const initialState: IState = {};
+import spotsReducer, { initialSpotsState, ISpotsState } from './spotsReducer';
 
-export default (state: any) => ({ ...state });
+export interface IState {
+  spots: ISpotsState;
+}
+
+export const initialState: IState = {
+  spots: initialSpotsState
+};
+
+export default combineReducers({
+  spots: spotsReducer
+});
