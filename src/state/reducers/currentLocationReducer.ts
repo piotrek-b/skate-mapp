@@ -4,7 +4,7 @@ import {
   CurrentLocationAction,
   CurrentLocationActionTypes,
 } from '../actions/currentLocationActions';
-import { ICoordinates } from '../models';
+import { ICoordinates } from '../../models';
 
 export interface ICurrentLocationState {
   coordinates: ICoordinates;

@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Marker } from 'react-native-maps';
 
-import { loadSpotsRequested } from '../actions/spotsActions';
+import { loadSpotsRequested } from '../state/actions/spotsActions';
 import { ISpot } from '../models';
 import { findRouteFromCurrentLocation } from '../routeUtils';
 

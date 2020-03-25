@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ISpot } from '../models';
+import { ISpot } from '../../models';
 
 export enum SpotsActionTypes {
   LOAD_SPOTS_REQUESTED = 'LOAD_SPOTS_REQUESTED',

@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 import { SpotsAction, SpotsActionTypes } from '../actions/spotsActions';
-import { ISpot } from '../models';
+import { ISpot } from '../../models';
 
 export interface ISpotsState {
   items: ISpot[];

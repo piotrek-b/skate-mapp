@@ -6,7 +6,7 @@ import * as Permissions from 'expo-permissions';
 
 // @ts-ignore
 import me from '../../assets/me.png';
-import { currentLocationChanged } from '../actions/currentLocationActions';
+import { currentLocationChanged } from '../state/actions/currentLocationActions';
 
 export default () => {
   const dispatch = useDispatch();

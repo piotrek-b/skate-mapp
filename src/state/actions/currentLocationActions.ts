@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ICoordinates } from '../models';
+import { ICoordinates } from '../../models';
 
 export enum CurrentLocationActionTypes {
   CURRENT_LOCATION_CHANGED = 'CURRENT_LOCATION_CHANGED',

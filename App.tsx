@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 
-import store from './src/store';
+import store from './src/state/store';
 import Main from './src/Main';
 import List from './src/List';
 

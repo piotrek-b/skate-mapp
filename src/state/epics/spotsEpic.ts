@@ -10,7 +10,7 @@ import {
   SpotsActionTypes,
   SpotsAction,
 } from '../actions/spotsActions';
-import data from '../../assets/mock-data.json';
+import data from '../../../assets/mock-data.json';
 
 // TODO: Use API for this;
 const loadSpotsEpic: Epic<SpotsAction, SpotsAction, IState> = (action$) =>
