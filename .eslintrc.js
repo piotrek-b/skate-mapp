@@ -5,13 +5,14 @@ module.exports = {
     'airbnb-typescript',
     'prettier',
     'prettier/@typescript-eslint',
-    'prettier/react'
+    'prettier/react',
   ],
   parserOptions: {
     ecmaVersion: 6,
-    project: 'tsconfig.json'
+    project: 'tsconfig.json',
   },
   rules: {
-    'no-param-reassign': 0
-  }
+    'no-param-reassign': 0,
+    'comma-dangle': ['error', 'always-multiline'],
+  },
 };

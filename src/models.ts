@@ -3,3 +3,8 @@ export interface ISpot {
   latitude: number;
   longitude: number;
 }
+
+export interface ICoordinates {
+  latitude: number;
+  longitude: number;
+}

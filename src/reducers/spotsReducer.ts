@@ -8,12 +8,12 @@ export interface ISpotsState {
 }
 
 export const initialSpotsState: ISpotsState = {
-  items: []
+  items: [],
 };
 
 export default function spotsReducer(
   state: ISpotsState = initialSpotsState,
-  action: SpotsAction
+  action: SpotsAction,
 ) {
   return produce(state, (draft) => {
     switch (action.type) {

@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    zIndex: -1
-  }
+    zIndex: -1,
+  },
 });
 
 export default () => {
@@ -45,7 +45,7 @@ export default () => {
         latitude: initialLatitude,
         longitude: initialLongitude,
         latitudeDelta: 0.05,
-        longitudeDelta: 0.05
+        longitudeDelta: 0.05,
       }}
     >
       <UserPositionMarker />

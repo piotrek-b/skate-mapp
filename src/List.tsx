@@ -9,7 +9,7 @@ import {
   Button,
   Text,
   Separator,
-  ListItem
+  ListItem,
 } from 'native-base';
 
 export default () => {

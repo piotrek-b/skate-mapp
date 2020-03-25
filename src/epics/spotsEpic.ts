@@ -8,7 +8,7 @@ import {
   loadSpotsSucceeded,
   loadSpotsFailed,
   SpotsActionTypes,
-  SpotsAction
+  SpotsAction,
 } from '../actions/spotsActions';
 import data from '../../assets/mock-data.json';
 
@@ -18,7 +18,7 @@ const loadSpotsEpic: Epic<SpotsAction, SpotsAction, IState> = (action$) =>
     filter(isOfType(SpotsActionTypes.LOAD_SPOTS_REQUESTED)),
     delay(5000),
     map(() => loadSpotsSucceeded(data.placesMarkers)),
-    catchError(() => of(loadSpotsFailed()))
+    catchError(() => of(loadSpotsFailed())),
   );
 
 export default combineEpics(loadSpotsEpic);

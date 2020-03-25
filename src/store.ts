@@ -6,7 +6,7 @@ import rootReducer, { initialState } from './reducers';
 const store = createStore(
   rootReducer,
   initialState,
-  applyMiddleware(epicMiddleware)
+  applyMiddleware(epicMiddleware),
 );
 
 // TODO: Investigate the nature of this TS error;

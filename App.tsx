@@ -22,7 +22,7 @@ export default () => {
         Roboto: require('native-base/Fonts/Roboto.ttf'),
         // eslint-disable-next-line global-require
         Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-        ...Ionicons.font
+        ...Ionicons.font,
       });
 
       setIsReady(true);

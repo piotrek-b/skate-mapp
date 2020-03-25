@@ -5,7 +5,7 @@ import { ISpot } from '../models';
 export enum SpotsActionTypes {
   LOAD_SPOTS_REQUESTED = 'LOAD_SPOTS_REQUESTED',
   LOAD_SPOTS_SUCCEEDED = 'LOAD_SPOTS_SUCCEEDED',
-  LOAD_SPOTS_FAILED = 'LOAD_SPOTS_FAILED'
+  LOAD_SPOTS_FAILED = 'LOAD_SPOTS_FAILED',
 }
 
 export interface ILoadSpotsRequestedAction extends Action {
@@ -28,7 +28,7 @@ export type SpotsAction =
 
 export function loadSpotsRequested(): ILoadSpotsRequestedAction {
   return {
-    type: SpotsActionTypes.LOAD_SPOTS_REQUESTED
+    type: SpotsActionTypes.LOAD_SPOTS_REQUESTED,
   };
 }
 
@@ -36,14 +36,14 @@ export function loadSpotsSucceeded(spots: ISpot[]): ILoadSpotsSucceededAction {
   return {
     type: SpotsActionTypes.LOAD_SPOTS_SUCCEEDED,
     payload: {
-      spots
-    }
+      spots,
+    },
   };
 }
 
 export function loadSpotsFailed(): ILoadSpotsFailedAction {
   return {
     type: SpotsActionTypes.LOAD_SPOTS_FAILED,
-    error: true
+    error: true,
   };
 }
