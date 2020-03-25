@@ -4,13 +4,10 @@ import { Marker } from 'react-native-maps';
 
 import { loadSpotsRequested } from '../actions/spotsActions';
 import { ISpot } from '../models';
-import { findRoute } from '../utils';
+import { findRouteFromCurrentLocation } from '../routeUtils';
 
 export default () => {
   const spots = useSelector((state) => state.spots.items);
-  const currentCoordinates = useSelector(
-    (state) => state.currentLocation.coordinates,
-  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,9 +21,7 @@ export default () => {
       <Marker
         coordinate={{ latitude, longitude }}
         title={name}
-        onPress={() =>
-          findRoute({ ...currentCoordinates }, { latitude, longitude })
-        }
+        onPress={() => findRouteFromCurrentLocation({ latitude, longitude })}
       />
     </Fragment>
   ));
