@@ -9,7 +9,6 @@ import 'react-native-gesture-handler';
 
 import store from './src/state/store';
 import Main from './src/Main';
-import List from './src/List';
 
 const Stack = createStackNavigator();
 
@@ -38,9 +37,13 @@ export default () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Main">
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          initialRouteName="Main"
+        >
           <Stack.Screen name="Main" component={Main} />
-          <Stack.Screen name="List" component={List} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

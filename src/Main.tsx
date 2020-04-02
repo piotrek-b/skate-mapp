@@ -1,17 +1,9 @@
 import React from 'react';
 import { Container, View } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import Map from './map/Map';
-import FabButton from './FabButton';
-import { RootStackParamList } from './types';
-
-type MainScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
-
-interface IFabButtonProps {
-  navigation: MainScreenNavigationProp;
-}
+import BottomPanel from './BottomPanel';
 
 const styles = StyleSheet.create({
   view: {
@@ -31,12 +23,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ({ navigation }: IFabButtonProps) => {
+export default () => {
   return (
     <Container>
       <View style={styles.view}>
-        <FabButton onClick={() => navigation.navigate('List')} />
         <Map />
+        <BottomPanel />
       </View>
     </Container>
   );

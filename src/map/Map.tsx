@@ -11,7 +11,7 @@ import mapStyle from './mapStyle.json';
 const styles = StyleSheet.create({
   mapStyle: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height - 24,
     zIndex: -1,
   },
 });
