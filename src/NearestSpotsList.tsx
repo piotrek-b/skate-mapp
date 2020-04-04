@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { StyleSheet } from 'react-native';
+import { useDispatch, useSelector, useMemo } from 'react-redux';
 import {
   Icon,
   Body,
@@ -14,14 +15,23 @@ import { getDistance } from 'geolib';
 
 import Longboard from './Longboard';
 import { ISpot } from './models';
-import { findRouteFromCurrentLocation } from './routeUtils';
+import { spotSelected } from './state/actions/selectedActions';
+
+const styles = StyleSheet.create({
+  listItemBody: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
 
 export default () => {
   const spots = useSelector((state) => state.spots.items);
   const currentCoordinates = useSelector(
     (state) => state.currentLocation.coordinates,
   );
-  const spotsWithDistance = React.useMemo(() => {
+  const dispatch = useDispatch();
+  const spotsWithDistance = useMemo(() => {
     const spotsWithNumericalDistance = spots.map((spot: ISpot) => {
       const distance = getDistance(
         {
@@ -68,20 +78,9 @@ export default () => {
               <ListItem
                 key={spot.name}
                 last={index === arr.length - 1}
-                onPress={() =>
-                  findRouteFromCurrentLocation({
-                    latitude: spot.latitude,
-                    longitude: spot.longitude,
-                  })
-                }
+                onPress={() => dispatch(spotSelected(spot))}
               >
-                <Body
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
+                <Body style={styles.listItemBody}>
                   <Longboard color="#888" width={40} height={40} />
                   <Text>
                     {spot.name} ({distance})

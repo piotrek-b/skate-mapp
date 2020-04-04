@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Text, View, Dimensions, Animated, StyleSheet } from 'react-native';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import { Icon } from 'native-base';
 
 import NearestSpotsList from './NearestSpotsList';
 import FabButton from './FabButton';
+import { IState } from './state/reducers';
 
 const { height } = Dimensions.get('window');
 
@@ -57,9 +59,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 });
-const draggedValue = new Animated.Value(24);
 const BottomPanel = () => {
-  const panel = React.useRef(null);
+  const draggedValue = useMemo(() => new Animated.Value(24), []);
+  const selectedSpot = useSelector((state: IState) => state.selected.spot);
+  const panel = useRef(null);
   const { top, bottom } = { top: height, bottom: 24 };
 
   const backgroundOpacity = draggedValue.interpolate({
@@ -74,22 +77,21 @@ const BottomPanel = () => {
     extrapolate: 'clamp',
   });
 
-  return (
+  return !selectedSpot ? (
     <SlidingUpPanel
       ref={panel}
       draggableRange={{ top, bottom }}
       animatedValue={draggedValue}
       snappingPoints={[60, 360]}
       height={height + 24}
+      minimumDistanceThreshold={5}
     >
       <View style={styles.panel}>
         <Animated.View
-          style={[
-            {
-              opacity: backgroundOpacity,
-              transform: [{ translateY: iconTranslateY }],
-            },
-          ]}
+          style={{
+            opacity: backgroundOpacity,
+            transform: [{ translateY: iconTranslateY }],
+          }}
         >
           <FabButton />
         </Animated.View>
@@ -102,7 +104,7 @@ const BottomPanel = () => {
         <NearestSpotsList />
       </View>
     </SlidingUpPanel>
-  );
+  ) : null;
 };
 
 export default BottomPanel;

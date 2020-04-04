@@ -3,17 +3,20 @@
     {
       "name": "Gozdów A1",
       "latitude": 51.981608,
-      "longitude": 19.56806
+      "longitude": 19.56806,
+      "imageUrl": "https://i.pinimg.com/originals/ca/94/cd/ca94cd264690f509fe9efbb68aa08552.png"
     },
     {
       "name": "Bielany - Wzdłuż Wisłostrady",
       "latitude": 52.303497,
-      "longitude": 20.947653
+      "longitude": 20.947653,
+      "imageUrl": "https://i.pinimg.com/originals/ca/94/cd/ca94cd264690f509fe9efbb68aa08552.png"
     },
     {
       "name": "Prosta (Przy trasie 50 Słabomierz)",
       "latitude": 52.005197,
-      "longitude": 20.489316
+      "longitude": 20.489316,
+      "imageUrl": "https://i.pinimg.com/originals/ca/94/cd/ca94cd264690f509fe9efbb68aa08552.png"
     }
   ]
 }

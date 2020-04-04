@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -7,6 +8,7 @@ import { Dimensions, StyleSheet } from 'react-native';
 import UserPositionMarker from './UserPositionMarker';
 import SpotsMarkers from './SpotsMarkers';
 import mapStyle from './mapStyle.json';
+import { spotSelected } from '../state/actions/selectedActions';
 
 const styles = StyleSheet.create({
   mapStyle: {
@@ -17,6 +19,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const dispatch = useDispatch();
   const [initialLatitude, setInitialLatitude] = useState(0);
   const [initialLongitude, setInitialLongitude] = useState(0);
   const [error, setError] = useState('');
@@ -47,6 +50,7 @@ export default () => {
         latitudeDelta: 0.05,
         longitudeDelta: 0.05,
       }}
+      onPress={() => dispatch(spotSelected(null))}
     >
       <UserPositionMarker />
       <SpotsMarkers />
