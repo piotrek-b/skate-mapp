@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Dimensions,
-  ImageSourcePropType,
-} from 'react-native';
+import { Image, StyleSheet, Dimensions } from 'react-native';
 import { Button, Card, CardItem, H3, Body, Text, Icon } from 'native-base';
 import { ISpot } from './models';
 import { findRouteFromCurrentLocation } from './routeUtils';
@@ -46,10 +41,7 @@ const SpotCard = ({ spot }: ISpotCardProps) => {
     <Card style={styles.container}>
       <CardItem>
         <Body>
-          <Image
-            source={spot.imageUrl as ImageSourcePropType}
-            style={styles.image}
-          />
+          <Image source={{ uri: spot.imageUrl }} style={styles.image} />
         </Body>
       </CardItem>
       <CardItem>

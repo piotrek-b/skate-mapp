@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { useDispatch, useSelector, useMemo } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Icon,
   Body,
@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const dispatch = useDispatch();
   const spots = useSelector((state) => state.spots.items);
   const currentCoordinates = useSelector(
     (state) => state.currentLocation.coordinates,
   );
-  const dispatch = useDispatch();
   const spotsWithDistance = useMemo(() => {
     const spotsWithNumericalDistance = spots.map((spot: ISpot) => {
       const distance = getDistance(

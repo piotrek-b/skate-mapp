@@ -41,7 +41,7 @@ export const findRouteFromCurrentLocationGoogle = (target: ICoordinates) => {
 
   const findRouteURL = getFindRouteFromCurrentLocationURLGoogle(
     targetCoordinates,
-    FormsOfTransportGoogle.PUBLIC_TRANSPORT,
+    FormsOfTransportGoogle.CAR,
   );
 
   return Linking.openURL(findRouteURL);
