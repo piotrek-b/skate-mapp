@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
-  const spots = useSelector((state) => state.spots.items);
+  const spotsIds = useSelector((state) => state.spots.allIds);
+  const spotsById = useSelector((state) => state.spots.byId);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,16 +26,24 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return spots.map(({ latitude, longitude, name, imageUrl }: ISpot) => (
-    <Fragment key={name}>
-      <Marker
-        coordinate={{ latitude, longitude }}
-        onPress={() =>
-          dispatch(spotSelected({ latitude, longitude, name, imageUrl }))
-        }
-      >
-        <Icon style={styles.pin} name="md-pin" android="md-pin" ios="ios-pin" />
-      </Marker>
-    </Fragment>
-  ));
+  return spotsIds.map((id) => {
+    const spot: ISpot = spotsById[id];
+    const { latitude, longitude, name } = spot;
+
+    return (
+      <Fragment key={name}>
+        <Marker
+          coordinate={{ latitude, longitude }}
+          onPress={() => dispatch(spotSelected(spot.id))}
+        >
+          <Icon
+            style={styles.pin}
+            name="md-pin"
+            android="md-pin"
+            ios="ios-pin"
+          />
+        </Marker>
+      </Fragment>
+    );
+  });
 };

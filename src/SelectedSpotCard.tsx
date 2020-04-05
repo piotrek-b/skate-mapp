@@ -5,7 +5,10 @@ import { IState } from './state/reducers';
 import SpotCard from './SpotCard';
 
 const SelectedSpotCard = () => {
-  const selectedSpot = useSelector((state: IState) => state.selected.spot);
+  const selectedSpotId = useSelector((state: IState) => state.selected.spotId);
+  const selectedSpot = useSelector(
+    (state: IState) => state.spots.byId[selectedSpotId],
+  );
   return selectedSpot ? <SpotCard spot={selectedSpot} /> : null;
 };
 

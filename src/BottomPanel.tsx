@@ -61,7 +61,10 @@ const styles = StyleSheet.create({
 });
 const BottomPanel = () => {
   const draggedValue = useMemo(() => new Animated.Value(24), []);
-  const selectedSpot = useSelector((state: IState) => state.selected.spot);
+  const selectedSpotId = useSelector((state: IState) => state.selected.spotId);
+  const selectedSpot = useSelector(
+    (state: IState) => state.spots.byId[selectedSpotId],
+  );
   const panel = useRef(null);
   const { top, bottom } = { top: height, bottom: 24 };
 

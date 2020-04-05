@@ -27,12 +27,14 @@ const styles = StyleSheet.create({
 
 export default () => {
   const dispatch = useDispatch();
-  const spots = useSelector((state) => state.spots.items);
+  const spotsIds = useSelector((state) => state.spots.allIds);
+  const spotsById = useSelector((state) => state.spots.byId);
   const currentCoordinates = useSelector(
     (state) => state.currentLocation.coordinates,
   );
   const spotsWithDistance = useMemo(() => {
-    const spotsWithNumericalDistance = spots.map((spot: ISpot) => {
+    const spotsWithNumericalDistance = spotsIds.map((id) => {
+      const spot: ISpot = spotsById[id];
       const distance = getDistance(
         {
           latitude: spot.latitude,
@@ -65,7 +67,7 @@ export default () => {
         distance: formattedDistance,
       };
     });
-  }, [spots, currentCoordinates]);
+  }, [spotsIds, spotsById, currentCoordinates]);
 
   return (
     <Container>
@@ -78,7 +80,7 @@ export default () => {
               <ListItem
                 key={spot.name}
                 last={index === arr.length - 1}
-                onPress={() => dispatch(spotSelected(spot))}
+                onPress={() => dispatch(spotSelected(spot.id))}
               >
                 <Body style={styles.listItemBody}>
                   <Longboard color="#888" width={40} height={40} />

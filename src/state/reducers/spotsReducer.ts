@@ -3,12 +3,16 @@ import produce from 'immer';
 import { SpotsAction, SpotsActionTypes } from '../actions/spotsActions';
 import { ISpot } from '../../models';
 
-export interface ISpotsState {
-  items: ISpot[];
+interface NormalizedObjects<T> {
+  byId: { [id: string]: T };
+  allIds: string[];
 }
 
+export type ISpotsState = NormalizedObjects<ISpot>;
+
 export const initialSpotsState: ISpotsState = {
-  items: [],
+  byId: {},
+  allIds: [],
 };
 
 export default function spotsReducer(
@@ -21,11 +25,25 @@ export default function spotsReducer(
         break;
 
       case SpotsActionTypes.LOAD_SPOTS_FAILED:
-        draft.items = [];
+        draft.byId = {};
+        draft.allIds = [];
         break;
 
       case SpotsActionTypes.LOAD_SPOTS_SUCCEEDED:
-        draft.items = action.payload.spots;
+        draft.byId = action.payload.spots.reduce((previous, current, index) => {
+          if (index === 1) {
+            return {
+              [previous.id]: previous,
+              [current.id]: current,
+            };
+          }
+
+          return {
+            ...previous,
+            [current.id]: current,
+          };
+        });
+        draft.allIds = action.payload.spots.map((spot) => spot.id);
         break;
       default:
         break;

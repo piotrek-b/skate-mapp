@@ -4,14 +4,13 @@ import {
   SelectedAction,
   SelectedActionTypes,
 } from '../actions/selectedActions';
-import { ISpot } from '../../models';
 
 export interface ISelectedState {
-  spot: ISpot;
+  spotId: string;
 }
 
 export const initialSelectedState: ISelectedState = {
-  spot: null,
+  spotId: null,
 };
 
 export default function selectedReducer(
@@ -21,7 +20,7 @@ export default function selectedReducer(
   return produce(state, (draft) => {
     switch (action.type) {
       case SelectedActionTypes.SPOT_SELECTED:
-        draft.spot = action.payload;
+        draft.spotId = action.payload;
         break;
       default:
         break;

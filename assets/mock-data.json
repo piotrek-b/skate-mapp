@@ -1,18 +1,21 @@
 {
   "placesMarkers": [
     {
+      "id": "1",
       "name": "Gozdów A1",
       "latitude": 51.981608,
       "longitude": 19.56806,
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Longboard_Dancing.jpg/640px-Longboard_Dancing.jpg"
     },
     {
+      "id": "2",
       "name": "Bielany - Wzdłuż Wisłostrady",
       "latitude": 52.303497,
       "longitude": 20.947653,
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Longboard_Dancing.jpg/640px-Longboard_Dancing.jpg"
     },
     {
+      "id": "3",
       "name": "Prosta (Przy trasie 50 Słabomierz)",
       "latitude": 52.005197,
       "longitude": 20.489316,
