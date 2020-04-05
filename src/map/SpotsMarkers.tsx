@@ -25,11 +25,13 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return spots.map(({ latitude, longitude, name }: ISpot) => (
+  return spots.map(({ latitude, longitude, name, imageUrl }: ISpot) => (
     <Fragment key={name}>
       <Marker
         coordinate={{ latitude, longitude }}
-        onPress={() => dispatch(spotSelected({ latitude, longitude, name }))}
+        onPress={() =>
+          dispatch(spotSelected({ latitude, longitude, name, imageUrl }))
+        }
       >
         <Icon style={styles.pin} name="md-pin" android="md-pin" ios="ios-pin" />
       </Marker>
