@@ -3,6 +3,7 @@ import { Image, StyleSheet, Dimensions } from 'react-native';
 import { Button, Card, CardItem, H3, Body, Text, Icon } from 'native-base';
 import { ISpot } from './models';
 import { findRouteFromCurrentLocation } from './routeUtils';
+import { formatDistance } from './utils';
 
 const { width } = Dimensions.get('window');
 
@@ -33,10 +34,11 @@ const styles = StyleSheet.create({
 });
 
 interface ISpotCardProps {
+  distance: number;
   spot: ISpot;
 }
 
-const SpotCard = ({ spot }: ISpotCardProps) => {
+const SpotCard = ({ distance, spot }: ISpotCardProps) => {
   return (
     <Card style={styles.container}>
       <CardItem>
@@ -46,7 +48,9 @@ const SpotCard = ({ spot }: ISpotCardProps) => {
       </CardItem>
       <CardItem>
         <Body>
-          <H3>{spot.name}</H3>
+          <H3>
+            {spot.name} ({formatDistance(distance)})
+          </H3>
         </Body>
       </CardItem>
       <CardItem>

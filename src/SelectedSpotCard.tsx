@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { getDistance } from 'geolib';
 import { IState } from './state/reducers';
 import SpotCard from './SpotCard';
 
@@ -9,7 +10,21 @@ const SelectedSpotCard = () => {
   const selectedSpot = useSelector(
     (state: IState) => state.spots.byId[selectedSpotId],
   );
-  return selectedSpot ? <SpotCard spot={selectedSpot} /> : null;
+  const currentCoordinates = useSelector(
+    (state: IState) => state.currentLocation.coordinates,
+  );
+  return selectedSpot ? (
+    <SpotCard
+      distance={getDistance(
+        {
+          latitude: selectedSpot.latitude,
+          longitude: selectedSpot.longitude,
+        },
+        currentCoordinates,
+      )}
+      spot={selectedSpot}
+    />
+  ) : null;
 };
 
 export default SelectedSpotCard;

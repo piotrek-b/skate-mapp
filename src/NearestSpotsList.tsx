@@ -16,6 +16,7 @@ import { getDistance } from 'geolib';
 import Longboard from './Longboard';
 import { ISpot } from './models';
 import { spotSelected } from './state/actions/selectedActions';
+import { formatDistance } from './utils';
 
 const styles = StyleSheet.create({
   listItemBody: {
@@ -25,6 +26,35 @@ const styles = StyleSheet.create({
   },
 });
 
+const getSpotsWithDistance = (
+  spotsIds,
+  spotsById,
+  currentCoordinates,
+) => () => {
+  const spotsWithNumericalDistance = spotsIds.map((id) => {
+    const spot: ISpot = spotsById[id];
+    const distance = getDistance(
+      {
+        latitude: spot.latitude,
+        longitude: spot.longitude,
+      },
+      currentCoordinates,
+    );
+
+    return {
+      distance,
+      spot,
+    };
+  });
+
+  spotsWithNumericalDistance.sort((a, b) => a.distance - b.distance);
+
+  return spotsWithNumericalDistance.map((spotWithDistance) => ({
+    spot: spotWithDistance.spot,
+    distance: formatDistance(spotWithDistance.distance),
+  }));
+};
+
 export default () => {
   const dispatch = useDispatch();
   const spotsIds = useSelector((state) => state.spots.allIds);
@@ -32,42 +62,10 @@ export default () => {
   const currentCoordinates = useSelector(
     (state) => state.currentLocation.coordinates,
   );
-  const spotsWithDistance = useMemo(() => {
-    const spotsWithNumericalDistance = spotsIds.map((id) => {
-      const spot: ISpot = spotsById[id];
-      const distance = getDistance(
-        {
-          latitude: spot.latitude,
-          longitude: spot.longitude,
-        },
-        currentCoordinates,
-      );
-
-      return {
-        distance,
-        spot,
-      };
-    });
-
-    spotsWithNumericalDistance.sort((a, b) => a.distance - b.distance);
-
-    return spotsWithNumericalDistance.map((spotWithDistance) => {
-      let formattedDistance = '';
-
-      if (spotWithDistance.distance > 1000) {
-        formattedDistance = `${(spotWithDistance.distance / 1000).toFixed(
-          2,
-        )}km`;
-      } else {
-        formattedDistance = `${spotWithDistance.distance.toFixed(2)}m`;
-      }
-
-      return {
-        spot: spotWithDistance.spot,
-        distance: formattedDistance,
-      };
-    });
-  }, [spotsIds, spotsById, currentCoordinates]);
+  const spotsWithDistance = useMemo(
+    getSpotsWithDistance(spotsIds, spotsById, currentCoordinates),
+    [spotsIds, spotsById, currentCoordinates],
+  );
 
   return (
     <Container>
