@@ -3,9 +3,9 @@ import { Container, View } from 'native-base';
 import { StyleSheet } from 'react-native';
 
 import Map from './map/Map';
+import SearchBar from './header/SearchBar';
 import BottomPanel from './BottomPanel';
 import SelectedSpotCard from './SelectedSpotCard';
-import Header from './header/Header';
 
 const styles = StyleSheet.create({
   view: {
@@ -18,7 +18,7 @@ export default () => {
     <Container>
       <View style={styles.view}>
         <Map />
-        <Header />
+        <SearchBar />
         <SelectedSpotCard />
         <BottomPanel />
       </View>
