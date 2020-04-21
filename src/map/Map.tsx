@@ -51,6 +51,9 @@ export default () => {
         longitudeDelta: 0.05,
       }}
       onPress={() => dispatch(spotSelected(null))}
+      onMarkerPress={({ nativeEvent }) =>
+        dispatch(spotSelected(nativeEvent.id))
+      }
     >
       <UserPositionMarker />
       <SpotsMarkers />

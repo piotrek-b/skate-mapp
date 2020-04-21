@@ -6,7 +6,6 @@ import { Icon } from 'native-base';
 
 import { loadSpotsRequested } from '../state/actions/spotsActions';
 import { ISpot } from '../models';
-import { spotSelected } from '../state/actions/selectedActions';
 
 const styles = StyleSheet.create({
   pin: {
@@ -32,10 +31,7 @@ export default () => {
 
     return (
       <Fragment key={name}>
-        <Marker
-          coordinate={{ latitude, longitude }}
-          onPress={() => dispatch(spotSelected(spot.id))}
-        >
+        <Marker identifier={spot.id} coordinate={{ latitude, longitude }}>
           <Icon
             style={styles.pin}
             name="md-pin"
