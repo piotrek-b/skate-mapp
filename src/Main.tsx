@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native';
 import Map from './map/Map';
 import BottomPanel from './BottomPanel';
 import SelectedSpotCard from './SelectedSpotCard';
+import Header from './header/Header';
 
 const styles = StyleSheet.create({
   view: {
@@ -17,6 +18,7 @@ export default () => {
     <Container>
       <View style={styles.view}>
         <Map />
+        <Header />
         <SelectedSpotCard />
         <BottomPanel />
       </View>
