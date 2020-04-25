@@ -4,6 +4,7 @@ import { Avatar, Chip, Searchbar, Surface } from 'react-native-paper';
 
 // @ts-ignore
 import me from '../../assets/me.png';
+import Longboard from '../Longboard';
 
 const SearchBarStylesConsts = {
   top: 40,
@@ -89,7 +90,13 @@ export default () => {
         showsHorizontalScrollIndicator={false}
       >
         {items.map(({ title, key }) => (
-          <Chip key={key} style={styles.chip} icon="roller-skate">
+          <Chip
+            key={key}
+            style={styles.chip}
+            icon={({ color, size }) => (
+              <Longboard color={color} width={size} height={size} />
+            )}
+          >
             {title}
           </Chip>
         ))}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, Dimensions } from 'react-native';
-import { Button, Card, CardItem, H3, Body, Text, Icon } from 'native-base';
+import { Button, Card } from 'react-native-paper';
+import { StyleSheet, Dimensions } from 'react-native';
 import { ISpot } from './models';
 import { findRouteFromCurrentLocation } from './routeUtils';
 import { formatDistance } from './utils';
@@ -10,26 +10,17 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    width: width - 2,
+    width: width - 20,
+    left: 10,
     margin: 0,
     padding: 0,
-    bottom: 24,
+    bottom: 32,
   },
   image: {
     height: 100,
     width: '100%',
     flex: 1,
     overflow: 'hidden',
-  },
-  button: {
-    borderColor: 'black',
-  },
-  icon: {
-    color: '#888',
-  },
-  text: {
-    textTransform: 'capitalize',
-    color: '#000',
   },
 });
 
@@ -41,25 +32,15 @@ interface ISpotCardProps {
 const SpotCard = ({ distance, spot }: ISpotCardProps) => {
   return (
     <Card style={styles.container}>
-      <CardItem>
-        <Body>
-          <Image source={{ uri: spot.imageUrl }} style={styles.image} />
-        </Body>
-      </CardItem>
-      <CardItem>
-        <Body>
-          <H3>
-            {spot.name} ({formatDistance(distance)})
-          </H3>
-        </Body>
-      </CardItem>
-      <CardItem>
-        <Body>
+      <Card.Cover style={styles.image} source={{ uri: spot.imageUrl }} />
+      <Card.Title
+        title={spot.name}
+        subtitle={`(${formatDistance(distance)})`}
+        right={(props) => (
           <Button
-            iconLeft
-            rounded
-            bordered
-            style={styles.button}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...props}
+            icon="navigation"
             onPress={() =>
               findRouteFromCurrentLocation({
                 latitude: spot.latitude,
@@ -67,16 +48,10 @@ const SpotCard = ({ distance, spot }: ISpotCardProps) => {
               })
             }
           >
-            <Icon
-              style={styles.icon}
-              name="md-navigate"
-              android="md-navigate"
-              ios="ios-navigate"
-            />
-            <Text style={styles.text}>Trasa</Text>
+            Route
           </Button>
-        </Body>
-      </CardItem>
+        )}
+      />
     </Card>
   );
 };
