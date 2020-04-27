@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 
 import UserPositionMarker from './UserPositionMarker';
 import SpotsMarkers from './SpotsMarkers';
 import mapStyle from './mapStyle.json';
 import { spotSelected } from '../state/actions/selectedActions';
+
+import FabButton from '../FabButton';
+import {
+  currentLocationFollowRequested,
+  currentLocationUnFollowRequested,
+} from '../state/actions/currentLocationActions';
 
 const styles = StyleSheet.create({
   mapStyle: {
@@ -20,6 +26,7 @@ const styles = StyleSheet.create({
 
 export default () => {
   const dispatch = useDispatch();
+  const mapRef = useRef(null);
   const [initialLatitude, setInitialLatitude] = useState(0);
   const [initialLongitude, setInitialLongitude] = useState(0);
   const [error, setError] = useState('');
@@ -40,23 +47,41 @@ export default () => {
   }, []);
 
   return error ? null : (
-    <MapView
-      provider={PROVIDER_GOOGLE}
-      customMapStyle={mapStyle.style}
-      style={styles.mapStyle}
-      region={{
-        latitude: initialLatitude,
-        longitude: initialLongitude,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
-      }}
-      onPress={() => dispatch(spotSelected(null))}
-      onMarkerPress={({ nativeEvent }) =>
-        dispatch(spotSelected(nativeEvent.id))
-      }
-    >
-      <UserPositionMarker />
-      <SpotsMarkers />
-    </MapView>
+    <View>
+      <MapView
+        ref={mapRef}
+        provider={PROVIDER_GOOGLE}
+        customMapStyle={mapStyle.style}
+        style={styles.mapStyle}
+        region={{
+          latitude: initialLatitude,
+          longitude: initialLongitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        }}
+        onPress={() => dispatch(spotSelected(null))}
+        onMarkerPress={({ nativeEvent }) =>
+          dispatch(spotSelected(nativeEvent.id))
+        }
+        onTouchStart={() => {
+          dispatch(currentLocationUnFollowRequested());
+        }}
+      >
+        <UserPositionMarker mapRef={mapRef} />
+        <SpotsMarkers />
+      </MapView>
+      <FabButton
+        onPress={async () => {
+          const location = await Location.getCurrentPositionAsync({});
+          mapRef.current.animateToRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          });
+          dispatch(currentLocationFollowRequested());
+        }}
+      />
+    </View>
   );
 };

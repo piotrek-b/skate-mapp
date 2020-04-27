@@ -8,21 +8,29 @@ import * as Permissions from 'expo-permissions';
 import me from '../../assets/me.png';
 import { currentLocationChanged } from '../state/actions/currentLocationActions';
 
-export default () => {
+interface IUserLocationMarkerProps {
+  mapRef: any;
+}
+
+export default ({ mapRef }: IUserLocationMarkerProps) => {
   const dispatch = useDispatch();
   const [error, setError] = useState('');
   const currentCoordinates = useSelector(
     (state) => state.currentLocation.coordinates,
   );
+  const isFollowingLocation = useSelector(
+    (state) => state.currentLocation.following,
+  );
 
   useEffect(() => {
+    let watcher;
     const callback = async () => {
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== 'granted') {
         setError('Permission to access location was denied');
       }
 
-      await Location.watchPositionAsync(
+      watcher = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.BestForNavigation,
           timeInterval: 500,
@@ -30,13 +38,28 @@ export default () => {
         },
         ({ coords: { latitude, longitude } }) => {
           dispatch(currentLocationChanged({ latitude, longitude }));
+
+          if (isFollowingLocation) {
+            mapRef.current.animateToRegion({
+              latitude,
+              longitude,
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
+            });
+          }
         },
       );
     };
 
     callback();
+
+    return () => {
+      if (watcher) {
+        watcher.remove();
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFollowingLocation]);
 
   return error ? null : (
     <Marker

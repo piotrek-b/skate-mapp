@@ -96,7 +96,7 @@ const BottomPanel = () => {
             transform: [{ translateY: iconTranslateY }],
           }}
         >
-          <FabButton />
+          <FabButton onPress={() => {}} />
         </Animated.View>
         <View style={styles.panelHeader}>
           <Icon style={styles.textHeader} name="md-remove" />
