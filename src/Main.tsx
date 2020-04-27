@@ -3,7 +3,6 @@ import { Container, View } from 'native-base';
 import { StyleSheet } from 'react-native';
 
 import Map from './map/Map';
-import SearchBar from './header/SearchBar';
 // import BottomPanel from './BottomPanel';
 import SelectedSpotCard from './SelectedSpotCard';
 
@@ -18,7 +17,6 @@ export default () => {
     <Container>
       <View style={styles.view}>
         <Map />
-        <SearchBar />
         <SelectedSpotCard />
       </View>
     </Container>

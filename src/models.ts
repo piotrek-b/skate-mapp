@@ -4,6 +4,7 @@ export interface ISpot {
   latitude: number;
   longitude: number;
   imageUrl?: string;
+  matching?: string[];
 }
 
 export interface ICoordinates {

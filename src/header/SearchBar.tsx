@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { Avatar, Chip, Searchbar, Surface } from 'react-native-paper';
 
 // @ts-ignore
 import me from '../../assets/me.png';
 import Longboard from '../Longboard';
+import { IState } from '../state/reducers';
+import { ISpot } from '../models';
+import { currentLocationUnFollowRequested } from '../state/actions/currentLocationActions';
 
 const SearchBarStylesConsts = {
   top: 40,
@@ -77,7 +81,39 @@ const items = [
   },
 ];
 
-export default () => {
+const FIT_TO_COORDINATES_OPTIONS = {
+  animated: true,
+  edgePadding: {
+    top: 60,
+    right: 60,
+    bottom: 60,
+    left: 60,
+  },
+};
+
+export default ({ mapRef }: { mapRef: any }) => {
+  const dispatch = useDispatch();
+  const spotsIds = useSelector((state: IState) => state.spots.allIds);
+  const spotsById = useSelector((state: IState) => state.spots.byId);
+  const getLatLngOfMatchingSpots = useCallback(
+    (key) => {
+      return spotsIds
+        .filter((id) => {
+          const spot: ISpot = spotsById[id];
+
+          return spot.matching ? spot.matching.includes(key) : false;
+        })
+        .map((id) => {
+          const spot: ISpot = spotsById[id];
+
+          return {
+            latitude: spot.latitude,
+            longitude: spot.longitude,
+          };
+        });
+    },
+    [spotsIds, spotsById],
+  );
   return (
     <View style={styles.view}>
       <Searchbar style={styles.searchBar} placeholder="Search" value="" />
@@ -96,6 +132,17 @@ export default () => {
             icon={({ color, size }) => (
               <Longboard color={color} width={size} height={size} />
             )}
+            onPress={() => {
+              const filteredArrayLatLng = getLatLngOfMatchingSpots(key);
+
+              if (filteredArrayLatLng.length > 0) {
+                mapRef.current.fitToCoordinates(
+                  filteredArrayLatLng,
+                  FIT_TO_COORDINATES_OPTIONS,
+                );
+                dispatch(currentLocationUnFollowRequested());
+              }
+            }}
           >
             {title}
           </Chip>
