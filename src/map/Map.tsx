@@ -15,7 +15,7 @@ import {
   currentLocationFollowRequested,
   currentLocationUnFollowRequested,
 } from '../state/actions/currentLocationActions';
-import SearchBar from '../header/SearchBar';
+import Header from '../header/Header';
 
 const styles = StyleSheet.create({
   mapStyle: {
@@ -71,7 +71,7 @@ export default () => {
         <UserPositionMarker mapRef={mapRef} />
         <SpotsMarkers />
       </MapView>
-      <SearchBar mapRef={mapRef} />
+      <Header mapRef={mapRef} />
       <FabButton
         onPress={async () => {
           const location = await Location.getCurrentPositionAsync({});

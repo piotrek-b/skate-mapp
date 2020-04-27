@@ -1,14 +1,15 @@
-import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
-import { Avatar, Chip, Searchbar, Surface } from 'react-native-paper';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Dimensions, StyleSheet } from 'react-native';
+import { Avatar, Searchbar, Surface } from 'react-native-paper';
 
 // @ts-ignore
 import me from '../../assets/me.png';
-import Longboard from '../Longboard';
-import { IState } from '../state/reducers';
-import { ISpot } from '../models';
 import { currentLocationUnFollowRequested } from '../state/actions/currentLocationActions';
+import {
+  getNominatimGeoJSONForQuery,
+  parseNominatimResponseToBoxCoordinates,
+} from '../utils';
 
 const SearchBarStylesConsts = {
   top: 40,
@@ -17,9 +18,6 @@ const SearchBarStylesConsts = {
 };
 
 const styles = StyleSheet.create({
-  view: {
-    position: 'absolute',
-  },
   searchBar: {
     position: 'absolute',
     top: SearchBarStylesConsts.top,
@@ -45,110 +43,30 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
     borderTopRightRadius: 5,
   },
-  scrollView: {
-    top: SearchBarStylesConsts.top + SearchBarStylesConsts.height + 15,
-    paddingLeft: 10,
-  },
-  chip: {
-    marginRight: 10,
-  },
 });
-
-const items = [
-  {
-    title: 'Cruzing',
-    key: 'cruzing',
-  },
-  {
-    title: 'Downhill',
-    key: 'downhill',
-  },
-  {
-    title: 'Push',
-    key: 'push',
-  },
-  {
-    title: 'Freeride',
-    key: 'freeride',
-  },
-  {
-    title: 'Slalom',
-    key: 'slalom',
-  },
-  {
-    title: 'Carving',
-    key: 'carving',
-  },
-];
-
-const FIT_TO_COORDINATES_OPTIONS = {
-  animated: true,
-  edgePadding: {
-    top: 60,
-    right: 60,
-    bottom: 60,
-    left: 60,
-  },
-};
 
 export default ({ mapRef }: { mapRef: any }) => {
   const dispatch = useDispatch();
-  const spotsIds = useSelector((state: IState) => state.spots.allIds);
-  const spotsById = useSelector((state: IState) => state.spots.byId);
-  const getLatLngOfMatchingSpots = useCallback(
-    (key) => {
-      return spotsIds
-        .filter((id) => {
-          const spot: ISpot = spotsById[id];
-
-          return spot.matching ? spot.matching.includes(key) : false;
-        })
-        .map((id) => {
-          const spot: ISpot = spotsById[id];
-
-          return {
-            latitude: spot.latitude,
-            longitude: spot.longitude,
-          };
-        });
-    },
-    [spotsIds, spotsById],
-  );
+  const [searchQuery, setSearchQuery] = useState('');
   return (
-    <View style={styles.view}>
-      <Searchbar style={styles.searchBar} placeholder="Search" value="" />
+    <>
+      <Searchbar
+        onChangeText={(query) => setSearchQuery(query)}
+        value={searchQuery}
+        style={styles.searchBar}
+        placeholder="Search"
+        onSubmitEditing={async ({ nativeEvent }) => {
+          const geoJSON = await getNominatimGeoJSONForQuery(nativeEvent.text);
+          mapRef.current.fitToCoordinates(
+            parseNominatimResponseToBoxCoordinates(geoJSON),
+            { animated: true },
+          );
+          dispatch(currentLocationUnFollowRequested());
+        }}
+      />
       <Surface style={styles.searchBarEnd}>
         <Avatar.Image size={32} source={me} />
       </Surface>
-      <ScrollView
-        horizontal
-        style={styles.scrollView}
-        showsHorizontalScrollIndicator={false}
-      >
-        {items.map(({ title, key }) => (
-          <Chip
-            key={key}
-            style={styles.chip}
-            icon={({ color, size }) => (
-              <Longboard color={color} width={size} height={size} />
-            )}
-            onPress={() => {
-              const filteredArrayLatLng = getLatLngOfMatchingSpots(key);
-
-              if (filteredArrayLatLng.length > 0) {
-                mapRef.current.fitToCoordinates(
-                  filteredArrayLatLng,
-                  FIT_TO_COORDINATES_OPTIONS,
-                );
-                dispatch(currentLocationUnFollowRequested());
-              }
-            }}
-          >
-            {title}
-          </Chip>
-        ))}
-        <Chip icon="dots-horizontal">More</Chip>
-      </ScrollView>
-    </View>
+    </>
   );
 };

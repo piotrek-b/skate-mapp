@@ -10,3 +10,26 @@ export const formatDistance = (distance) => {
 
   return formattedDistance;
 };
+
+export const parseNominatimResponseToBoxCoordinates = (resJson) => {
+  const mostInteresting = resJson.features[0];
+  return [
+    {
+      latitude: mostInteresting.bbox[1],
+      longitude: mostInteresting.bbox[0],
+    },
+    {
+      latitude: mostInteresting.bbox[3],
+      longitude: mostInteresting.bbox[2],
+    },
+  ];
+};
+
+export const getNominatimGeoJSONForQuery = async (query) => {
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?q=${query}&format=geojson`,
+  );
+  const resJson = await res.json();
+
+  return resJson;
+};
