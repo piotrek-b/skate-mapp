@@ -13,8 +13,8 @@ import { spotSelected } from '../state/actions/selectedActions';
 const styles = StyleSheet.create({
   mapStyle: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height - 24,
-    zIndex: -1,
+    height: Dimensions.get('window').height,
+    zIndex: 0,
   },
 });
 

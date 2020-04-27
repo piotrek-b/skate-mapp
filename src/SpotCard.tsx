@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     left: 10,
     margin: 0,
     padding: 0,
-    bottom: 32,
+    bottom: 8,
   },
   image: {
     height: 100,
