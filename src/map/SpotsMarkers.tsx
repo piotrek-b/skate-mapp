@@ -1,18 +1,11 @@
 import React, { useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet } from 'react-native';
 import { Marker } from 'react-native-maps';
-import { Icon } from 'native-base';
 
 import { loadSpotsRequested } from '../state/actions/spotsActions';
 import { ISpot } from '../models';
-
-const styles = StyleSheet.create({
-  pin: {
-    fontSize: 40,
-    color: '#fff',
-  },
-});
+import Longboard from '../Longboard';
+import IconMarker from '../IconMarker';
 
 export default () => {
   const spotsIds = useSelector((state) => state.spots.allIds);
@@ -32,11 +25,12 @@ export default () => {
     return (
       <Fragment key={name}>
         <Marker identifier={spot.id} coordinate={{ latitude, longitude }}>
-          <Icon
-            style={styles.pin}
-            name="md-pin"
-            android="md-pin"
-            ios="ios-pin"
+          <IconMarker
+            icon={({ color, size }) => (
+              <Longboard color={color} width={size} height={size} />
+            )}
+            iconColor="#383d7f"
+            markerColor="#fff"
           />
         </Marker>
       </Fragment>

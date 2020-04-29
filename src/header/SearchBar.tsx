@@ -65,7 +65,7 @@ export default ({ mapRef }: { mapRef: any }) => {
         }}
       />
       <Surface style={styles.searchBarEnd}>
-        <Avatar.Image size={32} source={me} />
+        <Avatar.Image size={40} source={me} />
       </Surface>
     </>
   );
