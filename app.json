@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "LongFinder",
-    "slug": "LongFinder",
+    "name": "SkateMapp",
+    "slug": "SkateMapp",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["ios", "android", "web"],
