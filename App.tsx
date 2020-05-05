@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
@@ -7,11 +6,21 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 import store from './src/state/store';
 import Main from './src/Main';
 
 const Stack = createStackNavigator();
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#383d7f',
+  },
+};
 
 export default () => {
   const [isReady, setIsReady] = useState(false);
@@ -37,7 +46,7 @@ export default () => {
 
   return (
     <Provider store={store}>
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{

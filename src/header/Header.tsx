@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   },
   chip: {
     marginRight: 10,
+    backgroundColor: '#fafafa',
   },
 });
 
