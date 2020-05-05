@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import { Avatar } from 'react-native-paper';
 
 // @ts-ignore
 import me from '../../assets/me.png';
@@ -63,10 +64,11 @@ export default ({ mapRef }: IUserLocationMarkerProps) => {
 
   return error ? null : (
     <Marker
-      image={me}
       coordinate={{ ...currentCoordinates }}
       title="U here"
       description="Cuz so"
-    />
+    >
+      <Avatar.Image source={me} size={40} />
+    </Marker>
   );
 };

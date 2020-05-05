@@ -10,6 +10,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 import store from './src/state/store';
 import Main from './src/Main';
+import Profile from './src/profile/Profile';
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,7 @@ export default () => {
             initialRouteName="Main"
           >
             <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Profile" component={Profile} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
