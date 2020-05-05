@@ -5,9 +5,8 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { Avatar } from 'react-native-paper';
 
-// @ts-ignore
-import me from '../../assets/me.png';
 import { currentLocationChanged } from '../state/actions/currentLocationActions';
+import { IState } from '../state/reducers';
 
 interface IUserLocationMarkerProps {
   mapRef: any;
@@ -16,6 +15,8 @@ interface IUserLocationMarkerProps {
 export default ({ mapRef }: IUserLocationMarkerProps) => {
   const dispatch = useDispatch();
   const [error, setError] = useState('');
+  const isSignedIn = useSelector((state: IState) => state.account.isSignedIn);
+  const userData = useSelector((state: IState) => state.account.data);
   const currentCoordinates = useSelector(
     (state) => state.currentLocation.coordinates,
   );
@@ -68,7 +69,11 @@ export default ({ mapRef }: IUserLocationMarkerProps) => {
       title="U here"
       description="Cuz so"
     >
-      <Avatar.Image source={me} size={40} />
+      {isSignedIn ? (
+        <Avatar.Image size={40} source={userData.picture} />
+      ) : (
+        <Avatar.Icon size={40} icon="account" />
+      )}
     </Marker>
   );
 };

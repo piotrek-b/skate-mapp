@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Dimensions, StyleSheet } from 'react-native';
 import { Avatar, Searchbar, Surface } from 'react-native-paper';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useNavigation } from '@react-navigation/core';
 
-// @ts-ignore
-import me from '../../assets/me.png';
 import { currentLocationUnFollowRequested } from '../state/actions/currentLocationActions';
 import {
   getNominatimGeoJSONForQuery,
   parseNominatimResponseToBoxCoordinates,
 } from '../utils';
+import { IState } from '../state/reducers';
 
 const SearchBarStylesConsts = {
   top: 40,
@@ -50,6 +49,8 @@ const styles = StyleSheet.create({
 export default ({ mapRef }: { mapRef: any }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isSignedIn = useSelector((state: IState) => state.account.isSignedIn);
+  const userData = useSelector((state: IState) => state.account.data);
   const [searchQuery, setSearchQuery] = useState('');
   return (
     <>
@@ -71,7 +72,11 @@ export default ({ mapRef }: { mapRef: any }) => {
         style={styles.searchBarEnd}
         onTouchStart={() => navigation.navigate('Profile')}
       >
-        <Avatar.Image size={40} source={me} />
+        {isSignedIn ? (
+          <Avatar.Image size={40} source={userData.picture} />
+        ) : (
+          <Avatar.Icon size={40} icon="account" />
+        )}
       </Surface>
     </>
   );
