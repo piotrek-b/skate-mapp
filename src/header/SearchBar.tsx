@@ -70,7 +70,9 @@ export default ({ mapRef }: { mapRef: any }) => {
       />
       <Surface
         style={styles.searchBarEnd}
-        onTouchStart={() => navigation.navigate('Profile')}
+        onTouchStart={() =>
+          navigation.navigate(isSignedIn ? 'Profile' : 'Auth')
+        }
       >
         {isSignedIn ? (
           <Avatar.Image size={40} source={userData.picture} />

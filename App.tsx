@@ -3,16 +3,11 @@ import { Provider } from 'react-redux';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 import store from './src/state/store';
-import Main from './src/Main';
-import Profile from './src/profile/Profile';
-
-const Stack = createStackNavigator();
+import AppContainer from './src/AppContainer';
 
 const theme = {
   ...DefaultTheme,
@@ -32,6 +27,8 @@ export default () => {
         Roboto: require('native-base/Fonts/Roboto.ttf'),
         // eslint-disable-next-line global-require
         Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+        // eslint-disable-next-line global-require
+        Pacifico: require('./assets/fonts/Pacifico-Regular.ttf'),
         ...Ionicons.font,
       });
 
@@ -48,17 +45,7 @@ export default () => {
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-            initialRouteName="Main"
-          >
-            <Stack.Screen name="Main" component={Main} />
-            <Stack.Screen name="Profile" component={Profile} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <AppContainer />
       </PaperProvider>
     </Provider>
   );

@@ -16,7 +16,7 @@ export interface IAccountState {
 }
 
 export const initialAccountState: IAccountState = {
-  isSignedIn: true,
+  isSignedIn: false,
   token: null,
   data: {
     name: 'Piotr',
