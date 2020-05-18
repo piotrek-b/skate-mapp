@@ -34,12 +34,12 @@ export default () => {
   return (
     <View style={styles.view}>
       <ScrollView showsVerticalScrollIndicator style={styles.container}>
-        <View style={styles.flex}>
-          <Avatar.Image size={100} source={userData.picture} />
-          <Title style={styles.title}>
-            {userData.name} {userData.surname}
-          </Title>
-        </View>
+        {userData.name && userData.picture && (
+          <View style={styles.flex}>
+            <Avatar.Image size={100} source={{ uri: userData.picture }} />
+            <Title style={styles.title}>{userData.name}</Title>
+          </View>
+        )}
         <List.Section>
           <List.Item
             title="Share Location"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, View, Image, Dimensions, Text } from 'react-native';
 import { Button, Caption } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,10 @@ import { useNavigation } from '@react-navigation/native';
 import imgSrc from '../assets/imgSrc.jpg';
 
 import { IState } from './state/reducers';
+import {
+  facebookSignInRequested,
+  googleSignInRequested,
+} from './state/actions/accountActions';
 
 const styles = StyleSheet.create({
   view: {
@@ -34,6 +38,7 @@ const styles = StyleSheet.create({
 
 export default () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const userData = useSelector((state: IState) => state.account.data);
 
   if (!userData) {
@@ -69,7 +74,7 @@ export default () => {
             icon="facebook"
             mode="contained"
             color="#3B5998"
-            onPress={() => console.log('Pressed')}
+            onPress={() => dispatch(facebookSignInRequested())}
             style={styles.button}
           >
             Continue with Facebook
@@ -78,7 +83,7 @@ export default () => {
             icon="google"
             mode="contained"
             color="#DB4A39"
-            onPress={() => console.log('Pressed')}
+            onPress={() => dispatch(googleSignInRequested())}
             style={styles.button}
           >
             Continue with Google

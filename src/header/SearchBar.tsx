@@ -74,8 +74,8 @@ export default ({ mapRef }: { mapRef: any }) => {
           navigation.navigate(isSignedIn ? 'Profile' : 'Auth')
         }
       >
-        {isSignedIn ? (
-          <Avatar.Image size={40} source={userData.picture} />
+        {isSignedIn && userData.picture ? (
+          <Avatar.Image size={40} source={{ uri: userData.picture }} />
         ) : (
           <Avatar.Icon size={40} icon="account" />
         )}

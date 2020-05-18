@@ -21,9 +21,12 @@ export default () => {
         }}
         initialRouteName={isSignedIn ? 'Main' : 'Auth'}
       >
-        <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="Profile" component={Profile} />
+        {!isSignedIn ? (
+          <Stack.Screen name="Auth" component={Auth} />
+        ) : (
+          <Stack.Screen name="Profile" component={Profile} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
