@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
 
 export default () => {
   const [title, setTitle] = useState('');
-  /* const [location, setLocation] = useState({
+  const [location, setLocation] = useState({
     latitude: 0,
     longitude: 0,
-  }); */
+  });
   // const [categories, setCategories] = useState([]);
   const [image, setImage] = useState('');
 
@@ -33,7 +33,7 @@ export default () => {
           onChange={({ nativeEvent }) => setTitle(nativeEvent.text)}
         />
         <Divider />
-        <AddLocationListItem />
+        <AddLocationListItem value={location} onChange={setLocation} />
         <Divider />
         <AddCategoriesListItem />
         <Divider />

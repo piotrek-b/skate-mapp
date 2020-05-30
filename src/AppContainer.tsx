@@ -9,6 +9,7 @@ import Profile from './profile/Profile';
 import { IState } from './state/reducers';
 import Auth from './Auth';
 import AddSpot from './addSpot/AddSpot';
+import AddLocationMap from './addSpot/views/AddLocationMap';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default () => {
         ) : (
           <>
             <Stack.Screen name="AddSpot" component={AddSpot} />
+            <Stack.Screen name="AddLocationMap" component={AddLocationMap} />
             <Stack.Screen name="Profile" component={Profile} />
           </>
         )}

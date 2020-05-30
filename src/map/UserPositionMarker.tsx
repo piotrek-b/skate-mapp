@@ -7,6 +7,7 @@ import { Avatar } from 'react-native-paper';
 
 import { currentLocationChanged } from '../state/actions/currentLocationActions';
 import { IState } from '../state/reducers';
+import { LatLngDeltaDefaults } from '../consts';
 
 interface IUserLocationMarkerProps {
   mapRef: any;
@@ -45,8 +46,8 @@ export default ({ mapRef }: IUserLocationMarkerProps) => {
             mapRef.current.animateToRegion({
               latitude,
               longitude,
-              latitudeDelta: 0.005,
-              longitudeDelta: 0.005,
+              latitudeDelta: LatLngDeltaDefaults.LATITUDE_DELTA,
+              longitudeDelta: LatLngDeltaDefaults.LONGITUDE_DELTA,
             });
           }
         },
