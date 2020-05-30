@@ -10,7 +10,7 @@ import SpotsMarkers from './SpotsMarkers';
 import mapStyle from './mapStyle.json';
 import { spotSelected } from '../state/actions/selectedActions';
 
-import FabButton from '../FabButton';
+import FabButtons from '../FabButtons';
 import {
   currentLocationFollowRequested,
   currentLocationUnFollowRequested,
@@ -72,8 +72,9 @@ export default () => {
         <SpotsMarkers />
       </MapView>
       <Header mapRef={mapRef} />
-      <FabButton
-        onPress={async () => {
+      <FabButtons
+        showAddButton
+        onLocationButtonPress={async () => {
           const location = await Location.getCurrentPositionAsync({});
           mapRef.current.animateToRegion({
             latitude: location.coords.latitude,

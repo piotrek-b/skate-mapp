@@ -14,5 +14,6 @@ module.exports = {
   rules: {
     'no-param-reassign': 0,
     'comma-dangle': ['error', 'always-multiline'],
+    'react/jsx-props-no-spreading': 'off',
   },
 };

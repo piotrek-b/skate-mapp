@@ -29,12 +29,17 @@ interface ISpotCardProps {
   spot: ISpot;
 }
 
+const withEllipsis = (string, maxLength) =>
+  string.length > maxLength + 3
+    ? `${string.substring(0, maxLength)}...`
+    : string;
+
 const SpotCard = ({ distance, spot }: ISpotCardProps) => {
   return (
     <Card style={styles.container}>
       <Card.Cover style={styles.image} source={{ uri: spot.imageUrl }} />
       <Card.Title
-        title={spot.name}
+        title={withEllipsis(spot.name, 20)}
         subtitle={`(${formatDistance(distance)})`}
         right={(props) => (
           <Button

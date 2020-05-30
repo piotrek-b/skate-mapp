@@ -3,7 +3,6 @@ import { Container, View } from 'native-base';
 import { StyleSheet } from 'react-native';
 
 import Map from './map/Map';
-// import BottomPanel from './BottomPanel';
 import SelectedSpotCard from './SelectedSpotCard';
 
 const styles = StyleSheet.create({

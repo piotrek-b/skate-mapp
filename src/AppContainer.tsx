@@ -8,6 +8,7 @@ import Main from './Main';
 import Profile from './profile/Profile';
 import { IState } from './state/reducers';
 import Auth from './Auth';
+import AddSpot from './addSpot/AddSpot';
 
 const Stack = createStackNavigator();
 
@@ -23,9 +24,14 @@ export default () => {
       >
         <Stack.Screen name="Main" component={Main} />
         {!isSignedIn ? (
-          <Stack.Screen name="Auth" component={Auth} />
+          <>
+            <Stack.Screen name="Auth" component={Auth} />
+          </>
         ) : (
-          <Stack.Screen name="Profile" component={Profile} />
+          <>
+            <Stack.Screen name="AddSpot" component={AddSpot} />
+            <Stack.Screen name="Profile" component={Profile} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
