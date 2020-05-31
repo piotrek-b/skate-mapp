@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { FAB } from 'react-native-paper';
@@ -6,12 +6,12 @@ import { StyleSheet } from 'react-native';
 import { IState } from './state/reducers';
 
 const styles = StyleSheet.create({
-  plusButton: {
-    backgroundColor: '#fff',
+  fabGroup: {
     position: 'absolute',
-    margin: 16,
-    right: 8,
-    bottom: 68,
+    paddingBottom: 68,
+  },
+  starButton: {
+    backgroundColor: '#fff',
   },
   locationButton: {
     backgroundColor: '#fff',
@@ -33,6 +33,7 @@ export default (
     onLocationButtonPress: () => {},
   },
 ) => {
+  const [isOpen, setIsOpen] = useState(false);
   const isFollowingLocation = useSelector(
     (state: IState) => state.currentLocation.following,
   );
@@ -41,15 +42,21 @@ export default (
   const selectedSpotId = useSelector((state: IState) => state.selected.spotId);
   return selectedSpotId ? null : (
     <>
-      {isSignedIn && showAddButton && (
-        <FAB
-          small
-          color="#383d7f"
-          style={styles.plusButton}
-          icon="plus"
-          onPress={() => navigation.navigate('AddSpot')}
-        />
-      )}
+      <FAB.Group
+        visible={isSignedIn && showAddButton}
+        open={isOpen}
+        icon="star"
+        actions={[
+          {
+            label: 'Add Spot',
+            icon: 'map-marker-check',
+            onPress: () => navigation.navigate('AddSpot'),
+          },
+        ]}
+        onStateChange={() => setIsOpen(!isOpen)}
+        fabStyle={styles.starButton}
+        style={styles.fabGroup}
+      />
       <FAB
         color={isFollowingLocation ? '#383d7f' : '#888'}
         style={styles.locationButton}

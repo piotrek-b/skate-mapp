@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions, Image } from 'react-native';
-import { Divider, List, Menu } from 'react-native-paper';
+import { Divider, Menu } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+
+import ListItem from './ListItem';
+import getItemColor from '../getItemColor';
 
 const styles = StyleSheet.create({
   image: {
@@ -18,11 +21,12 @@ const styles = StyleSheet.create({
 });
 
 interface IAddImageListItemProps {
+  error?: boolean;
   value: string;
   onChange: (event: any) => void;
 }
 
-export default ({ value, onChange }: IAddImageListItemProps) => {
+export default ({ error, value, onChange }: IAddImageListItemProps) => {
   const [menuOpened, setMenuOpened] = useState(false);
   const [cameraPermissionGranted, setCameraPermissionGrantedStatus] = useState(
     false,
@@ -53,13 +57,14 @@ export default ({ value, onChange }: IAddImageListItemProps) => {
         visible={menuOpened}
         onDismiss={() => setMenuOpened(false)}
         anchor={
-          <List.Item
+          <ListItem
+            color={getItemColor(error, value !== '')}
             title={
               value
                 ? value.split('/')[value.split('/').length - 1]
                 : 'Add Image'
             }
-            left={(props) => <List.Icon {...props} icon="image" />}
+            icon="image"
             onPress={() => setMenuOpened(true)}
           />
         }

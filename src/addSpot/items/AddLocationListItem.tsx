@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { List } from 'react-native-paper';
+
 import {
   getNominatimGeoJSONForLatLng,
   parseNominatimResponseToDisplayName,
 } from '../../utils';
+import ListItem from './ListItem';
+import getItemColor from '../getItemColor';
 
 interface ILatLng {
   latitude: number;
@@ -12,11 +14,12 @@ interface ILatLng {
 }
 
 interface IAddLocationListItemProps {
+  error?: boolean;
   value: ILatLng;
   onChange: (latLng: ILatLng) => void;
 }
 
-export default ({ value, onChange }: IAddLocationListItemProps) => {
+export default ({ error, value, onChange }: IAddLocationListItemProps) => {
   const navigation = useNavigation();
   const [name, setName] = useState('');
 
@@ -35,9 +38,10 @@ export default ({ value, onChange }: IAddLocationListItemProps) => {
   }, [value]);
 
   return (
-    <List.Item
+    <ListItem
+      color={getItemColor(error, value.latitude && value.longitude)}
       title={value.longitude && value.latitude ? name : 'Add Location'}
-      left={(props) => <List.Icon {...props} icon="map-marker" />}
+      icon="map-marker"
       onPress={() =>
         navigation.navigate('AddLocationMap', {
           onSelect: onChange,

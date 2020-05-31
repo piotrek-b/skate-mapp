@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Dimensions } from 'react-native';
-import { Button, IconButton, TextInput } from 'react-native-paper';
+import { Appbar, TextInput } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   title: {
@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
   singleItem: {
     width: Dimensions.get('window').width,
     display: 'flex',
-    marginBottom: 15,
   },
   column: {
     flexDirection: 'row',
@@ -20,40 +19,29 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     zIndex: 0,
-    marginTop: -50,
-    paddingLeft: 35,
+    paddingLeft: 15,
     backgroundColor: 'rgba(255, 255, 255, 0)',
     fontSize: 20,
   },
 });
 
 interface IAddSpotHeaderProps {
+  error?: boolean;
   value: string;
   onChange: (event: any) => void;
 }
 
-export default ({ value, onChange }: IAddSpotHeaderProps) => {
+export default ({ error, value, onChange }: IAddSpotHeaderProps) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.singleItem}>
-      <View
-        style={[
-          styles.singleItem,
-          styles.column,
-          { width: Dimensions.get('window').width - 10, zIndex: 1 },
-        ]}
-      >
-        <View>
-          <IconButton icon="close" onPress={() => navigation.goBack()} />
-        </View>
-        <View>
-          <Button mode="contained" onPress={() => navigation.goBack()}>
-            Save
-          </Button>
-        </View>
-      </View>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Add Spot" />
+      </Appbar.Header>
       <TextInput
+        error={error}
         underlineColor="rgba(255, 255, 255, 0)"
         style={styles.titleInput}
         placeholder="Add Title"

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { YellowBox } from 'react-native';
 import { Provider } from 'react-redux';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
@@ -15,8 +16,13 @@ const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#383d7f',
+    accent: '#383d7f',
   },
 };
+
+YellowBox.ignoreWarnings([
+  'Non-serializable values were found in the navigation state',
+]);
 
 export default () => {
   const [isReady, setIsReady] = useState(false);

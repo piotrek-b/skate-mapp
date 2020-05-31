@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { StyleSheet, View, Dimensions, ScrollView } from 'react-native';
-import { Avatar, List, Switch, Title } from 'react-native-paper';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Appbar, Avatar, List, Switch, Title } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { IState } from '../state/reducers';
@@ -10,9 +10,6 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
   },
-  container: {
-    marginTop: Dimensions.get('window').height / 2 - 260,
-  },
   flex: {
     display: 'flex',
     justifyContent: 'center',
@@ -20,6 +17,9 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 10,
+  },
+  container: {
+    paddingTop: 20,
   },
 });
 
@@ -33,6 +33,10 @@ export default () => {
 
   return (
     <View style={styles.view}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Profile" />
+      </Appbar.Header>
       <ScrollView showsVerticalScrollIndicator style={styles.container}>
         {userData.name && userData.picture && (
           <View style={styles.flex}>

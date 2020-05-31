@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Marker } from 'react-native-maps';
+import { IconButton } from 'react-native-paper';
 
 import UserPositionMarker from '../../map/UserPositionMarker';
 
@@ -49,7 +50,9 @@ export default () => {
             onMarkerPress={() => {}}
           >
             <UserPositionMarker mapRef={mapRef} />
-            <Marker coordinate={{ latitude, longitude }} />
+            <Marker coordinate={{ latitude, longitude }}>
+              <IconButton color="#fff" size={50} icon="map-marker-check" />
+            </Marker>
           </LocationBasedMapView>
           {latitude && longitude ? (
             <MiddleBottomChip

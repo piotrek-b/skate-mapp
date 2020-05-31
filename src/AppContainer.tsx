@@ -10,6 +10,7 @@ import { IState } from './state/reducers';
 import Auth from './Auth';
 import AddSpot from './addSpot/AddSpot';
 import AddLocationMap from './addSpot/views/AddLocationMap';
+import AddCategories from './addSpot/views/AddCategories';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ export default () => {
           <>
             <Stack.Screen name="AddSpot" component={AddSpot} />
             <Stack.Screen name="AddLocationMap" component={AddLocationMap} />
+            <Stack.Screen name="AddCategories" component={AddCategories} />
             <Stack.Screen name="Profile" component={Profile} />
           </>
         )}

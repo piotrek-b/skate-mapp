@@ -54,33 +54,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const items = [
-  {
-    title: 'Cruzing',
-    key: 'cruzing',
-  },
-  {
-    title: 'Downhill',
-    key: 'downhill',
-  },
-  {
-    title: 'Push',
-    key: 'push',
-  },
-  {
-    title: 'Freeride',
-    key: 'freeride',
-  },
-  {
-    title: 'Slalom',
-    key: 'slalom',
-  },
-  {
-    title: 'Carving',
-    key: 'carving',
-  },
-];
-
 const FIT_TO_COORDINATES_OPTIONS = {
   animated: true,
   edgePadding: {
@@ -95,6 +68,8 @@ export default ({ mapRef }: { mapRef: any }) => {
   const dispatch = useDispatch();
   const spotsIds = useSelector((state: IState) => state.spots.allIds);
   const spotsById = useSelector((state: IState) => state.spots.byId);
+  const categoriesById = useSelector((state: IState) => state.categories.byId);
+  const categoriesIds = useSelector((state: IState) => state.categories.ids);
   const getLatLngOfMatchingSpots = useCallback(
     (key) => {
       return spotsIds
@@ -122,28 +97,33 @@ export default ({ mapRef }: { mapRef: any }) => {
         style={styles.scrollView}
         showsHorizontalScrollIndicator={false}
       >
-        {items.map(({ title, key }) => (
-          <Chip
-            key={key}
-            style={styles.chip}
-            icon={({ color, size }) => (
-              <Longboard color={color} width={size} height={size} />
-            )}
-            onPress={() => {
-              const filteredArrayLatLng = getLatLngOfMatchingSpots(key);
-
-              if (filteredArrayLatLng.length > 0) {
-                mapRef.current.fitToCoordinates(
-                  filteredArrayLatLng,
-                  FIT_TO_COORDINATES_OPTIONS,
+        {categoriesIds.map((id) => {
+          const category = categoriesById[id];
+          return (
+            <Chip
+              key={category.id}
+              style={styles.chip}
+              icon={({ color, size }) => (
+                <Longboard color={color} width={size} height={size} />
+              )}
+              onPress={() => {
+                const filteredArrayLatLng = getLatLngOfMatchingSpots(
+                  category.id,
                 );
-                dispatch(currentLocationUnFollowRequested());
-              }
-            }}
-          >
-            {title}
-          </Chip>
-        ))}
+
+                if (filteredArrayLatLng.length > 0) {
+                  mapRef.current.fitToCoordinates(
+                    filteredArrayLatLng,
+                    FIT_TO_COORDINATES_OPTIONS,
+                  );
+                  dispatch(currentLocationUnFollowRequested());
+                }
+              }}
+            >
+              {category.title}
+            </Chip>
+          );
+        })}
         <Chip icon="dots-horizontal">More</Chip>
       </ScrollView>
     </View>
