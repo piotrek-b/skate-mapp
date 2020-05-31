@@ -37,26 +37,27 @@ export default (
   const isFollowingLocation = useSelector(
     (state: IState) => state.currentLocation.following,
   );
-  const isSignedIn = useSelector((state: IState) => state.account.isSignedIn);
   const navigation = useNavigation();
   const selectedSpotId = useSelector((state: IState) => state.selected.spotId);
   return selectedSpotId ? null : (
     <>
-      <FAB.Group
-        visible={isSignedIn && showAddButton}
-        open={isOpen}
-        icon="star"
-        actions={[
-          {
-            label: 'Add Spot',
-            icon: 'map-marker-check',
-            onPress: () => navigation.navigate('AddSpot'),
-          },
-        ]}
-        onStateChange={() => setIsOpen(!isOpen)}
-        fabStyle={styles.starButton}
-        style={styles.fabGroup}
-      />
+      {showAddButton ? (
+        <FAB.Group
+          visible
+          open={isOpen}
+          icon="star"
+          actions={[
+            {
+              label: 'Add Spot',
+              icon: 'map-marker-check',
+              onPress: () => navigation.navigate('AddSpot'),
+            },
+          ]}
+          onStateChange={() => setIsOpen(!isOpen)}
+          fabStyle={styles.starButton}
+          style={styles.fabGroup}
+        />
+      ) : null}
       <FAB
         color={isFollowingLocation ? '#383d7f' : '#888'}
         style={styles.locationButton}

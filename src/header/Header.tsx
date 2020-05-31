@@ -46,10 +46,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     top: SearchBarStylesConsts.top + SearchBarStylesConsts.height + 15,
-    paddingLeft: 10,
   },
   chip: {
-    marginRight: 10,
+    marginLeft: 10,
     backgroundColor: '#fafafa',
   },
 });
@@ -124,7 +123,9 @@ export default ({ mapRef }: { mapRef: any }) => {
             </Chip>
           );
         })}
-        <Chip icon="dots-horizontal">More</Chip>
+        <Chip style={styles.chip} icon="dots-horizontal">
+          More
+        </Chip>
       </ScrollView>
     </View>
   );
