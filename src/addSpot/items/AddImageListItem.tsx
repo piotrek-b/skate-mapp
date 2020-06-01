@@ -26,6 +26,13 @@ interface IAddImageListItemProps {
   onChange: (event: any) => void;
 }
 
+const getImagePrettyName = (uri) => {
+  const uglyName = uri.split('/')[uri.split('/').length - 1];
+  const extension = uglyName.split('.')[uglyName.split('.').length - 1];
+
+  return `Cover.${extension}`;
+};
+
 export default ({ error, value, onChange }: IAddImageListItemProps) => {
   const [menuOpened, setMenuOpened] = useState(false);
   const [cameraPermissionGranted, setCameraPermissionGrantedStatus] = useState(
@@ -59,11 +66,7 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
         anchor={
           <ListItem
             color={getItemColor(error, value !== '')}
-            title={
-              value
-                ? value.split('/')[value.split('/').length - 1]
-                : 'Add Image'
-            }
+            title={value ? getImagePrettyName(value) : 'Add Image'}
             icon="image"
             onPress={() => setMenuOpened(true)}
           />
@@ -90,7 +93,10 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
             setMenuOpened(false);
 
             if (!cameraPermissionGranted) {
-              const { status } = await Permissions.askAsync(Permissions.CAMERA);
+              const { status } = await Permissions.askAsync(
+                Permissions.CAMERA,
+                Permissions.CAMERA_ROLL,
+              );
               if (status === 'granted') {
                 setCameraPermissionGrantedStatus(true);
               }

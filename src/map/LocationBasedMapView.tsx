@@ -16,11 +16,6 @@ const styles = StyleSheet.create({
   },
 });
 
-interface IInitialLatLng {
-  initialLatitude: number;
-  initialLongitude: number;
-}
-
 interface ILocationBasedMapViewProps {
   children: React.ReactNode;
   initialLatitude: number;

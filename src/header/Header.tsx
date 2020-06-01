@@ -123,9 +123,6 @@ export default ({ mapRef }: { mapRef: any }) => {
             </Chip>
           );
         })}
-        <Chip style={styles.chip} icon="dots-horizontal">
-          More
-        </Chip>
       </ScrollView>
     </View>
   );
