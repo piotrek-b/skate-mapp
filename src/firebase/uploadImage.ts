@@ -9,6 +9,7 @@ const uploadImage = (id, imageUri) => {
   return new Promise((resolve, reject) => {
     fetch(imageUri)
       .then((response) => response.blob())
+      // TODO: Provide image compression algorithm
       .then((imageBlob) => {
         const ref = Firebase.storage.ref(`images/${filename}`);
         const uploadTask = ref.put(imageBlob);

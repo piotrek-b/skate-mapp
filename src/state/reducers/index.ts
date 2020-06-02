@@ -14,6 +14,10 @@ import accountReducer, {
   initialAccountState,
   IAccountState,
 } from './accountReducer';
+import loadingReducer, {
+  initialLoadingState,
+  ILoadingState,
+} from './loadingReducer';
 
 interface ICategoriesState {
   byId: any;
@@ -26,6 +30,7 @@ export interface IState {
   selected: ISelectedState;
   account: IAccountState;
   categories: ICategoriesState;
+  loading: ILoadingState;
 }
 
 const initialCategoriesState = {
@@ -64,6 +69,7 @@ export const initialState: IState = {
   selected: initialSelectedState,
   account: initialAccountState,
   categories: initialCategoriesState,
+  loading: initialLoadingState,
 };
 
 function categoriesReducer(state = initialCategoriesState) {
@@ -76,4 +82,5 @@ export default combineReducers({
   selected: selectedReducer,
   account: accountReducer,
   categories: categoriesReducer,
+  loading: loadingReducer,
 });

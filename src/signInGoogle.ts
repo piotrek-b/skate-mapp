@@ -1,5 +1,6 @@
 import * as Google from 'expo-google-app-auth';
 import { Platform } from 'react-native';
+import firebase from 'firebase';
 
 import { GoogleData } from './consts';
 
@@ -13,16 +14,25 @@ async function signInGoogle() {
       scopes: ['profile', 'email'],
     };
     // @ts-ignore
-    const { type, accessToken, user } = await Google.logInAsync(config);
+    const { type, accessToken, idToken, user } = await Google.logInAsync(
+      config,
+    );
 
-    return type === 'success'
-      ? {
-          token: accessToken,
-          userData: user,
-        }
-      : null;
+    if (type === 'success') {
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        idToken,
+        accessToken,
+      );
+      await firebase.auth().signInWithCredential(credential);
+      return {
+        token: accessToken,
+        userData: user,
+      };
+    }
+
+    return null;
   } catch ({ message }) {
-    console.log(message);
     return null;
   }
 }

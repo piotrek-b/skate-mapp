@@ -1,4 +1,5 @@
 import * as Facebook from 'expo-facebook';
+import firebase from 'firebase';
 
 import { APP_NAME, FacebookData } from './consts';
 
@@ -15,12 +16,19 @@ async function signInFacebook() {
       permissions: ['public_profile'],
     });
 
-    return type === 'success'
-      ? {
-          token,
-          expires,
-        }
-      : null;
+    if (type === 'success') {
+      await firebase
+        .auth()
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+      await firebase.auth().signInWithCredential(credential);
+      return {
+        token,
+        expires,
+      };
+    }
+
+    return null;
   } catch ({ message }) {
     return null;
   }
