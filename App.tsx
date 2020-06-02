@@ -9,6 +9,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 import store from './src/state/store';
 import AppContainer from './src/AppContainer';
+import Firebase from './src/firebase/firebase';
 
 const theme = {
   ...DefaultTheme,
@@ -22,9 +23,11 @@ const theme = {
 
 YellowBox.ignoreWarnings([
   'Non-serializable values were found in the navigation state',
+  'Setting a timer',
 ]);
 
 export default () => {
+  Firebase.init();
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
     const callback = async () => {

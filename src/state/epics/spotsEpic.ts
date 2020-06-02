@@ -1,6 +1,6 @@
 import { combineEpics, Epic } from 'redux-observable';
-import { map, catchError, filter, delay } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { map, catchError, filter, switchMap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 import { isOfType } from 'typesafe-actions';
 
 import { IState } from '../reducers';
@@ -9,16 +9,53 @@ import {
   loadSpotsFailed,
   SpotsActionTypes,
   SpotsAction,
+  addSpotSucceeded,
+  addSpotFailed,
 } from '../actions/spotsActions';
-import data from '../../../assets/mock-data.json';
+import Firebase from '../../firebase/firebase';
+import uploadImage from '../../firebase/uploadImage';
+import { ISpot } from '../../models';
 
-// TODO: Use API for this;
 const loadSpotsEpic: Epic<SpotsAction, SpotsAction, IState> = (action$) =>
   action$.pipe(
     filter(isOfType(SpotsActionTypes.LOAD_SPOTS_REQUESTED)),
-    delay(5000),
-    map(() => loadSpotsSucceeded(data.placesMarkers)),
+    switchMap(() =>
+      from(Firebase.database.ref(`/spots`).once('value')).pipe(
+        map((snapshot: any) => snapshot.val()),
+      ),
+    ),
+    map((data) => {
+      return loadSpotsSucceeded(data);
+    }),
     catchError(() => of(loadSpotsFailed())),
   );
 
-export default combineEpics(loadSpotsEpic);
+const addSpotEpic: Epic<SpotsAction, SpotsAction, IState> = (action$) =>
+  action$.pipe(
+    filter(isOfType(SpotsActionTypes.ADD_SPOT_REQUESTED)),
+    switchMap((action) => {
+      const imageUri = action.payload.imageUrl;
+
+      return from(uploadImage(action.payload.id, imageUri)).pipe(
+        switchMap((imageDownloadURL: string) => {
+          const spot: ISpot = {
+            id: action.payload.id,
+            name: action.payload.name,
+            imageUrl: imageDownloadURL,
+            matching: action.payload.matching,
+            latitude: action.payload.latitude,
+            longitude: action.payload.longitude,
+          };
+          return from(
+            Firebase.database.ref(`/spots/${action.payload.id}`).set(spot),
+          ).pipe(map(() => spot));
+        }),
+      );
+    }),
+    map((data) => {
+      return addSpotSucceeded(data);
+    }),
+    catchError((error) => of(addSpotFailed(error))),
+  );
+
+export default combineEpics(loadSpotsEpic, addSpotEpic);

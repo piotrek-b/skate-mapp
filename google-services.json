@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "990318714450",
+    "firebase_url": "https://skatemapp.firebaseio.com",
+    "project_id": "skatemapp",
+    "storage_bucket": "skatemapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990318714450:android:0b978784bfe8040934c98b",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990318714450-f3rq0p4ffm3lnqhn71u6af8cteuidelv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "host.exp.exponent",
+            "certificate_hash": "e3702c96dad616f6b66b8cc365ab5e431ce5afb6"
+          }
+        },
+        {
+          "client_id": "990318714450-236ehsp25stp2sk5as5icii4einadnpo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRNH90r5_T7LCHSnVUrRxSMXJzgJ-67uM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990318714450-236ehsp25stp2sk5as5icii4einadnpo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "990318714450-28rhdemkgootk3ele8jb80jm5g1s4jl3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

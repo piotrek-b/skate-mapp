@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Divider, Snackbar } from 'react-native-paper';
@@ -8,6 +9,8 @@ import AddLocationListItem from './items/AddLocationListItem';
 import AddCategoriesListItem from './items/AddCategoriesListItem';
 import AddImageListItem from './items/AddImageListItem';
 import BottomButtons from '../BottomButtons';
+import { addSpotRequested } from '../state/actions/spotsActions';
+import { IState } from '../state/reducers';
 
 const styles = StyleSheet.create({
   view: {
@@ -29,6 +32,7 @@ const styles = StyleSheet.create({
 
 export default () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [snackbarIsVisible, setSnackbarVisibility] = useState(false);
   const [title, setTitle] = useState('');
@@ -38,6 +42,7 @@ export default () => {
   });
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState('');
+  const spotsIds = useSelector((state: IState) => state.spots.allIds);
 
   return (
     <View style={styles.view}>
@@ -89,6 +94,16 @@ export default () => {
               setError(true);
               setSnackbarVisibility(true);
             } else {
+              dispatch(
+                addSpotRequested({
+                  id: `${spotsIds.length}`,
+                  name: title,
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                  matching: categories,
+                  imageUrl: image,
+                }),
+              );
               navigation.goBack();
             }
           },

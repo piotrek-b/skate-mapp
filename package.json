@@ -23,8 +23,10 @@
     "expo-facebook": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-google-app-auth": "^8.1.0",
+    "expo-image-picker": "~8.0.1",
     "expo-location": "~8.0.0",
     "expo-permissions": "~8.0.0",
+    "firebase": "^7.14.6",
     "geolib": "^3.2.1",
     "immer": "^6.0.2",
     "native-base": "2.13.8",
@@ -46,8 +48,7 @@
     "redux-observable": "^1.2.0",
     "rn-sliding-up-panel": "^2.4.0",
     "rxjs": "^6.5.4",
-    "typesafe-actions": "^5.1.0",
-    "expo-image-picker": "~8.0.1"
+    "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
