@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { Avatar, Searchbar, Surface } from 'react-native-paper';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useNavigation } from '@react-navigation/core';
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    elevation: 4,
+    elevation: Platform.OS === 'ios' ? 1 : 4,
     borderBottomRightRadius: 5,
     borderTopRightRadius: 5,
   },

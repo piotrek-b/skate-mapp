@@ -14,9 +14,7 @@ async function signInGoogle() {
       scopes: ['profile', 'email'],
     };
     // @ts-ignore
-    const { type, accessToken, idToken, user } = await Google.logInAsync(
-      config,
-    );
+    const { type, accessToken, idToken } = await Google.logInAsync(config);
 
     if (type === 'success') {
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
@@ -24,10 +22,9 @@ async function signInGoogle() {
         idToken,
         accessToken,
       );
-      await firebase.auth().signInWithCredential(credential);
+      const { user } = await firebase.auth().signInWithCredential(credential);
       return {
-        token: accessToken,
-        userData: user,
+        user,
       };
     }
 

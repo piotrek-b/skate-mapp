@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+import { User } from 'firebase';
 
 import { SignInPlatformType } from '../../types';
 
@@ -9,18 +10,19 @@ export enum AccountActionTypes {
   SIGN_OUT_REQUESTED = 'SIGN_OUT_REQUESTED',
   SIGN_OUT_SUCCEEDED = 'SIGN_OUT_SUCCEEDED',
   SIGN_OUT_FAILED = 'SIGN_OUT_FAILED',
+  CHECK_LOGIN_STATUS_REQUESTED = 'CHECK_LOGIN_STATUS_REQUESTED',
+  CHECK_LOGIN_STATUS_SUCCEEDED = 'CHECK_LOGIN_STATUS_SUCCEEDED',
+  CHECK_LOGIN_STATUS_FAILED = 'CHECK_LOGIN_STATUS_FAILED',
   USER_DATA_UPDATED = 'USER_DATA_UPDATED',
 }
 
 interface ISignActionPayload {
-  platform: SignInPlatformType;
+  platform?: SignInPlatformType;
 }
 
 interface ISignedInActionPayload {
-  platform: SignInPlatformType;
-  token: string;
-  expires?: string;
-  userData?: any;
+  platform?: SignInPlatformType;
+  user: User;
 }
 
 export interface ISignInRequestedAction extends Action {
@@ -40,17 +42,35 @@ export interface ISignInFailedAction extends Action {
 
 export interface ISignOutRequestedAction extends Action {
   type: AccountActionTypes.SIGN_OUT_REQUESTED;
-  payload: ISignActionPayload;
+  payload?: ISignActionPayload;
 }
 
 export interface ISignOutSucceededAction extends Action {
   type: AccountActionTypes.SIGN_OUT_SUCCEEDED;
-  payload: ISignActionPayload;
+  payload?: ISignActionPayload;
 }
 
 export interface ISignOutFailedAction extends Action {
   type: AccountActionTypes.SIGN_OUT_FAILED;
-  payload: ISignActionPayload;
+  error: true;
+  payload?: ISignActionPayload;
+}
+
+export interface ICheckLoginStatusRequestedAction extends Action {
+  type: AccountActionTypes.CHECK_LOGIN_STATUS_REQUESTED;
+}
+
+export interface ICheckLoginStatusSucceededAction extends Action {
+  type: AccountActionTypes.CHECK_LOGIN_STATUS_SUCCEEDED;
+  payload: {
+    user: User | null;
+  };
+}
+
+export interface ICheckLoginStatusFailedAction extends Action {
+  type: AccountActionTypes.CHECK_LOGIN_STATUS_FAILED;
+  error: true;
+  payload: string;
 }
 
 export interface IUserDataUpdatedAction extends Action {
@@ -65,6 +85,9 @@ export type IAccountAction =
   | ISignOutRequestedAction
   | ISignOutSucceededAction
   | ISignOutFailedAction
+  | ICheckLoginStatusRequestedAction
+  | ICheckLoginStatusSucceededAction
+  | ICheckLoginStatusFailedAction
   | IUserDataUpdatedAction;
 
 export function facebookSignInRequested(): ISignInRequestedAction {
@@ -84,27 +107,31 @@ export function googleSignInRequested(): ISignInRequestedAction {
   };
 }
 
-export function facebookSignInSucceeded(
-  token,
-  expires,
-): ISignInSucceededAction {
+export function signInSucceeded(user): ISignInSucceededAction {
   return {
     type: AccountActionTypes.SIGN_IN_SUCCEEDED,
     payload: {
-      platform: SignInPlatformType.Facebook,
-      token,
-      expires,
+      user,
     },
   };
 }
 
-export function googleSignInSucceeded(token, data): ISignInSucceededAction {
+export function facebookSignInSucceeded(user): ISignInSucceededAction {
+  return {
+    type: AccountActionTypes.SIGN_IN_SUCCEEDED,
+    payload: {
+      platform: SignInPlatformType.Facebook,
+      user,
+    },
+  };
+}
+
+export function googleSignInSucceeded(user): ISignInSucceededAction {
   return {
     type: AccountActionTypes.SIGN_IN_SUCCEEDED,
     payload: {
       platform: SignInPlatformType.Google,
-      token,
-      userData: data,
+      user,
     },
   };
 }
@@ -125,9 +152,52 @@ export function googleSignInFailed(): ISignInFailedAction {
   };
 }
 
+export function signOutRequested(): ISignOutRequestedAction {
+  return {
+    type: AccountActionTypes.SIGN_OUT_REQUESTED,
+  };
+}
+
+export function signOutSucceeded(): ISignOutSucceededAction {
+  return {
+    type: AccountActionTypes.SIGN_OUT_SUCCEEDED,
+  };
+}
+
+export function signOutFailed(message): ISignOutFailedAction {
+  return {
+    type: AccountActionTypes.SIGN_OUT_FAILED,
+    payload: message,
+    error: true,
+  };
+}
+
 export function userDataUpdated(payload): IUserDataUpdatedAction {
   return {
     type: AccountActionTypes.USER_DATA_UPDATED,
     payload,
+  };
+}
+
+export function checkLoginStatusRequested(): ICheckLoginStatusRequestedAction {
+  return {
+    type: AccountActionTypes.CHECK_LOGIN_STATUS_REQUESTED,
+  };
+}
+
+export function checkLoginStatusSucceeded(
+  user,
+): ICheckLoginStatusSucceededAction {
+  return {
+    type: AccountActionTypes.CHECK_LOGIN_STATUS_SUCCEEDED,
+    payload: { user },
+  };
+}
+
+export function checkLoginStatusFailed(message): ICheckLoginStatusFailedAction {
+  return {
+    type: AccountActionTypes.CHECK_LOGIN_STATUS_FAILED,
+    error: true,
+    payload: message,
   };
 }

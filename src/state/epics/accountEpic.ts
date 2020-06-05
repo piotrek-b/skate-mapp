@@ -1,17 +1,22 @@
 import { combineEpics, Epic } from 'redux-observable';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
-import { ajax } from 'rxjs/ajax';
+import firebase from 'firebase';
 
 import { IState } from '../reducers';
 import {
   AccountActionTypes,
+  checkLoginStatusFailed,
+  checkLoginStatusSucceeded,
   facebookSignInFailed,
   facebookSignInSucceeded,
   googleSignInFailed,
   googleSignInSucceeded,
   IAccountAction,
+  signOutFailed,
+  signOutSucceeded,
   userDataUpdated,
+  ISignInSucceededAction,
 } from '../actions/accountActions';
 import signInFacebook from '../../signInFacebook';
 import { SignInPlatformType } from '../../types';
@@ -19,18 +24,21 @@ import signInGoogle from '../../signInGoogle';
 
 const facebookSignInEpic: Epic<IAccountAction, IAccountAction, IState> = (
   action$,
+  state$,
 ) =>
   action$.pipe(
     filter(
       (action) =>
+        !state$.value.account.isSignedIn &&
         action.type === AccountActionTypes.SIGN_IN_REQUESTED &&
         action.payload.platform === SignInPlatformType.Facebook,
     ),
     switchMap(() =>
       from(signInFacebook()).pipe(
-        map((result) => {
-          if (result) {
-            return facebookSignInSucceeded(result.token, result.expires);
+        map(({ user }) => {
+          console.log('facebook', user);
+          if (user) {
+            return facebookSignInSucceeded(user);
           }
 
           return facebookSignInFailed();
@@ -39,45 +47,24 @@ const facebookSignInEpic: Epic<IAccountAction, IAccountAction, IState> = (
     ),
     catchError(() => of(facebookSignInFailed())),
   );
-const facebookSignedInEpic: Epic<IAccountAction, IAccountAction, IState> = (
-  action$,
-) =>
-  action$.pipe(
-    filter(
-      (action) =>
-        action.type === AccountActionTypes.SIGN_IN_SUCCEEDED &&
-        action.payload.platform === SignInPlatformType.Facebook,
-    ),
-    switchMap(({ payload: { token } }) =>
-      ajax
-        .getJSON(
-          `https://graph.facebook.com/me?access_token=${token}&fields=id,name,birthday,picture.type(large)`,
-        )
-        .pipe(
-          map(({ name, picture: { data: { url: picture } } }) =>
-            userDataUpdated({
-              name,
-              picture,
-            }),
-          ),
-        ),
-    ),
-  );
 
 const googleSignInEpic: Epic<IAccountAction, IAccountAction, IState> = (
   action$,
+  state$,
 ) =>
   action$.pipe(
     filter(
       (action) =>
+        !state$.value.account.isSignedIn &&
         action.type === AccountActionTypes.SIGN_IN_REQUESTED &&
         action.payload.platform === SignInPlatformType.Google,
     ),
     switchMap(() =>
       from(signInGoogle()).pipe(
-        map((result) => {
-          if (result) {
-            return googleSignInSucceeded(result.token, result.userData);
+        map(({ user }) => {
+          console.log('facebook', user);
+          if (user) {
+            return googleSignInSucceeded(user);
           }
 
           return googleSignInFailed();
@@ -86,26 +73,69 @@ const googleSignInEpic: Epic<IAccountAction, IAccountAction, IState> = (
     ),
     catchError(() => of(googleSignInFailed())),
   );
-const googleSignedInEpic: Epic<IAccountAction, IAccountAction, IState> = (
+
+const signedInEpic: Epic<IAccountAction, IAccountAction, IState> = (action$) =>
+  action$.pipe(
+    filter(
+      (action) =>
+        (action.type === AccountActionTypes.SIGN_IN_SUCCEEDED ||
+          action.type === AccountActionTypes.CHECK_LOGIN_STATUS_SUCCEEDED) &&
+        action.payload.user !== null,
+    ),
+    map(({ payload: { user } }: ISignInSucceededAction) => {
+      if (user.providerData[0].providerId === 'facebook.com') {
+        return userDataUpdated({
+          name: user.displayName,
+          picture: `${user.photoURL}?type=large`,
+        });
+      }
+
+      return userDataUpdated({
+        name: user.displayName,
+        picture: user.photoURL.replace('s96-c', 's400-c'),
+      });
+    }),
+  );
+
+const signOutEpic: Epic<IAccountAction, IAccountAction, IState> = (action$) =>
+  action$.pipe(
+    filter((action) => action.type === AccountActionTypes.SIGN_OUT_REQUESTED),
+    switchMap(() =>
+      from(firebase.auth().signOut()).pipe(map(() => signOutSucceeded())),
+    ),
+    catchError((error) => of(signOutFailed(error))),
+  );
+
+const checkLoginStatusEpic: Epic<IAccountAction, IAccountAction, IState> = (
   action$,
 ) =>
   action$.pipe(
     filter(
       (action) =>
-        action.type === AccountActionTypes.SIGN_IN_SUCCEEDED &&
-        action.payload.platform === SignInPlatformType.Google,
+        action.type === AccountActionTypes.CHECK_LOGIN_STATUS_REQUESTED,
     ),
-    map((action) =>
-      userDataUpdated({
-        name: action.payload.userData.name,
-        picture: action.payload.userData.photoUrl,
-      }),
+    switchMap(() =>
+      from(
+        new Promise((resolve, reject) => {
+          firebase.auth().onAuthStateChanged(
+            (user) => resolve(user),
+            (error) => reject(error),
+          );
+        }),
+      ).pipe(
+        map(
+          (user) => checkLoginStatusSucceeded(user),
+          catchError((error) => of(checkLoginStatusFailed(error))),
+        ),
+        catchError((error) => of(checkLoginStatusFailed(error))),
+      ),
     ),
   );
 
 export default combineEpics(
+  checkLoginStatusEpic,
   facebookSignInEpic,
-  facebookSignedInEpic,
   googleSignInEpic,
-  googleSignedInEpic,
+  signedInEpic,
+  signOutEpic,
 );

@@ -1,10 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Appbar, Avatar, List, Switch, Title } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { IState } from '../state/reducers';
+import { signOutRequested } from '../state/actions/accountActions';
 
 const styles = StyleSheet.create({
   view: {
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const userData = useSelector((state: IState) => state.account.data);
 
@@ -68,7 +70,9 @@ export default () => {
           <List.Item
             title="Sign Out"
             left={() => <List.Icon icon="logout" />}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              dispatch(signOutRequested());
+            }}
           />
         </List.Section>
       </ScrollView>

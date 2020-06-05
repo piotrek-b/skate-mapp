@@ -11,7 +11,6 @@ async function signInFacebook() {
       // @ts-ignore
       token,
       // @ts-ignore
-      expires,
     } = await Facebook.logInWithReadPermissionsAsync({
       permissions: ['public_profile'],
     });
@@ -21,10 +20,9 @@ async function signInFacebook() {
         .auth()
         .setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       const credential = firebase.auth.FacebookAuthProvider.credential(token);
-      await firebase.auth().signInWithCredential(credential);
+      const { user } = await firebase.auth().signInWithCredential(credential);
       return {
-        token,
-        expires,
+        user,
       };
     }
 
