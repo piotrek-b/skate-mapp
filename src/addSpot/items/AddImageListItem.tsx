@@ -46,7 +46,7 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: true,
           aspect: [4, 3],
-          quality: 1,
+          quality: 0.3,
         });
 
         if (!result.cancelled) {
@@ -79,7 +79,7 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
               mediaTypes: ImagePicker.MediaTypeOptions.Images,
               allowsEditing: true,
               aspect: [4, 3],
-              quality: 1,
+              quality: 0.3,
             });
 
             if (!result.cancelled) {
@@ -107,7 +107,7 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
-                quality: 1,
+                quality: 0.3,
               });
 
               if (!result.cancelled) {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Card } from 'react-native-paper';
 import { StyleSheet, Dimensions } from 'react-native';
+import { useSafeArea } from 'react-native-safe-area-context';
+
 import { ISpot } from './models';
 import { findRouteFromCurrentLocation } from './routeUtils';
 import { formatDistance } from './utils';
@@ -14,7 +16,6 @@ const styles = StyleSheet.create({
     left: 10,
     margin: 0,
     padding: 0,
-    bottom: 8,
   },
   image: {
     height: 100,
@@ -35,8 +36,9 @@ const withEllipsis = (string, maxLength) =>
     : string;
 
 const SpotCard = ({ distance, spot }: ISpotCardProps) => {
+  const insets = useSafeArea();
   return (
-    <Card style={styles.container}>
+    <Card style={[styles.container, { bottom: insets.bottom + 8 }]}>
       <Card.Cover style={styles.image} source={{ uri: spot.imageUrl }} />
       <Card.Title
         title={withEllipsis(spot.name, 20)}
