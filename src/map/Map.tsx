@@ -18,7 +18,7 @@ export default () => {
   const isLoading = useSelector((state: IState) =>
     addingSpotLoadingSelector(state),
   );
-  const mapRef = useRef(null);
+  const mapRef: any = useRef(null);
 
   return (
     <LocationBasedMapContainer
@@ -33,12 +33,14 @@ export default () => {
             initialLatitude={initialLatitude}
             initialLongitude={initialLongitude}
             onPress={() => dispatch(spotSelected(null))}
-            onMarkerPress={({ nativeEvent }) =>
-              dispatch(spotSelected(nativeEvent.id))
-            }
+            onMarkerPress={({ nativeEvent }) => {
+              if (nativeEvent.id) {
+                dispatch(spotSelected(nativeEvent.id));
+              }
+            }}
           >
-            <UserPositionMarker mapRef={mapRef} />
             <SpotsMarkers />
+            <UserPositionMarker mapRef={mapRef} />
           </LocationBasedMapView>
         </>
       )}

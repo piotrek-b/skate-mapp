@@ -48,6 +48,7 @@
     "redux-observable": "^1.2.0",
     "rn-sliding-up-panel": "^2.4.0",
     "rxjs": "^6.5.4",
+    "supercluster": "^7.1.0",
     "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
