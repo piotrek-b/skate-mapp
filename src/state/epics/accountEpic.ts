@@ -87,12 +87,14 @@ const signedInEpic: Epic<IAccountAction, IAccountAction, IState> = (action$) =>
         return userDataUpdated({
           name: user.displayName,
           picture: `${user.photoURL}?type=large`,
+          uid: user.uid,
         });
       }
 
       return userDataUpdated({
         name: user.displayName,
         picture: user.photoURL.replace('s96-c', 's400-c'),
+        uid: user.uid,
       });
     }),
   );

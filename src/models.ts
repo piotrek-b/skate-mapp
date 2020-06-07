@@ -1,4 +1,5 @@
 export interface ISpot {
+  author: string;
   id: string;
   name: string;
   latitude: number;

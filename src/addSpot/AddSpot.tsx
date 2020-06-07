@@ -43,6 +43,7 @@ export default () => {
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState('');
   const spotsIds = useSelector((state: IState) => state.spots.allIds);
+  const uid = useSelector((state: IState) => state.account.data.uid);
 
   return (
     <View style={styles.view}>
@@ -96,6 +97,7 @@ export default () => {
             } else {
               dispatch(
                 addSpotRequested({
+                  author: uid,
                   id: `${spotsIds.length}`,
                   name: title,
                   latitude: location.latitude,

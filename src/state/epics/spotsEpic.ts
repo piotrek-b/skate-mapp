@@ -40,6 +40,7 @@ const addSpotEpic: Epic<SpotsAction, SpotsAction, IState> = (action$) =>
         switchMap((imageDownloadURL: string) => {
           const spot: ISpot = {
             id: action.payload.id,
+            author: action.payload.author,
             name: action.payload.name,
             imageUrl: imageDownloadURL,
             matching: action.payload.matching,

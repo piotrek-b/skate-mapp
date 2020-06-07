@@ -11,6 +11,7 @@ export interface IAccountState {
     name: string;
     email: string;
     picture: { uri: string };
+    uid: string;
   };
 }
 
@@ -22,6 +23,7 @@ export const initialAccountState: IAccountState = {
     name: null,
     email: null,
     picture: null,
+    uid: null,
   },
 };
 
@@ -41,6 +43,7 @@ export default function accountReducer(
         console.log(action.payload);
         draft.data.name = action.payload.name;
         draft.data.picture = action.payload.picture;
+        draft.data.uid = action.payload.uid;
         break;
       }
       case AccountActionTypes.SIGN_OUT_SUCCEEDED: {
