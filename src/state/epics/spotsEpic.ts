@@ -2,6 +2,7 @@ import { combineEpics, Epic } from 'redux-observable';
 import { map, catchError, filter, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { isOfType } from 'typesafe-actions';
+import firebase from 'firebase';
 
 import { IState } from '../reducers';
 import {
@@ -12,15 +13,14 @@ import {
   addSpotSucceeded,
   addSpotFailed,
 } from '../actions/spotsActions';
-import Firebase from '../../firebase/firebase';
-import uploadImage from '../../firebase/uploadImage';
+import uploadImage from '../../utils/firebase/uploadImage';
 import { ISpot } from '../../models';
 
 const loadSpotsEpic: Epic<SpotsAction, SpotsAction, IState> = (action$) =>
   action$.pipe(
     filter(isOfType(SpotsActionTypes.LOAD_SPOTS_REQUESTED)),
     switchMap(() =>
-      from(Firebase.database.ref(`/spots`).once('value')).pipe(
+      from(firebase.database().ref(`/spots`).once('value')).pipe(
         map((snapshot: any) => snapshot.val()),
       ),
     ),
@@ -48,7 +48,7 @@ const addSpotEpic: Epic<SpotsAction, SpotsAction, IState> = (action$) =>
             longitude: action.payload.longitude,
           };
           return from(
-            Firebase.database.ref(`/spots/${action.payload.id}`).set(spot),
+            firebase.database().ref(`/spots/${action.payload.id}`).set(spot),
           ).pipe(map(() => spot));
         }),
       );

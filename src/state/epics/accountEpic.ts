@@ -18,9 +18,9 @@ import {
   userDataUpdated,
   ISignInSucceededAction,
 } from '../actions/accountActions';
-import signInFacebook from '../../signInFacebook';
+import signInFacebook from '../../utils/firebase/signInFacebook';
 import { SignInPlatformType } from '../../types';
-import signInGoogle from '../../signInGoogle';
+import signInGoogle from '../../utils/firebase/signInGoogle';
 
 const facebookSignInEpic: Epic<IAccountAction, IAccountAction, IState> = (
   action$,

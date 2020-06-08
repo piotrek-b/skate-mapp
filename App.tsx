@@ -6,10 +6,10 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import 'react-native-gesture-handler';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import Firebase from './src/utils/firebase/Firebase';
 
 import store from './src/state/store';
-import AppContainer from './src/AppContainer';
-import Firebase from './src/firebase/firebase';
+import AppContainer from './src/components/AppContainer';
 
 const theme = {
   ...DefaultTheme,
@@ -28,8 +28,12 @@ YellowBox.ignoreWarnings([
 ]);
 
 export default () => {
-  Firebase.init();
   const [isReady, setIsReady] = useState(false);
+  const [firebaseInitialized, setfirebaseInitializedStatus] = useState(false);
+  if (!firebaseInitialized) {
+    Firebase.init();
+    setfirebaseInitializedStatus(Firebase.isInitialized);
+  }
   useEffect(() => {
     const callback = async () => {
       await Font.loadAsync({
@@ -48,7 +52,7 @@ export default () => {
     callback();
   }, []);
 
-  if (!isReady) {
+  if (!isReady || !firebaseInitialized) {
     return <AppLoading />;
   }
 
