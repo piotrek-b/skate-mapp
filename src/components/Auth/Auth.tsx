@@ -18,6 +18,9 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
   },
+  image: {
+    position: 'absolute',
+  },
   container: {
     marginTop: 20,
   },
@@ -29,6 +32,10 @@ const styles = StyleSheet.create({
   title: {
     marginTop: Dimensions.get('window').height / 2 - 200,
     marginBottom: 80,
+  },
+  titleText: {
+    fontFamily: 'Pacifico',
+    fontSize: 40,
   },
   button: {
     marginBottom: 20,
@@ -49,11 +56,13 @@ export default () => {
   return (
     <View style={[styles.view, { backgroundColor: theme.colors.background }]}>
       <Image
-        style={{
-          position: 'absolute',
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
-        }}
+        style={[
+          styles.image,
+          {
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
+          },
+        ]}
         resizeMode="cover"
         source={imgSrc}
         blurRadius={1}
@@ -61,11 +70,12 @@ export default () => {
       <View style={styles.container}>
         <View style={[styles.flex, styles.title]}>
           <Text
-            style={{
-              color: theme.colors.surface,
-              fontFamily: 'Pacifico',
-              fontSize: 40,
-            }}
+            style={[
+              styles.titleText,
+              {
+                color: theme.colors.surface,
+              },
+            ]}
           >
             SkateMapp
           </Text>
@@ -93,7 +103,7 @@ export default () => {
         <View style={[styles.flex]}>
           <Caption style={{ color: theme.colors.surface }}>OR</Caption>
         </View>
-        <View style={[styles.flex, { marginTop: 20 }]}>
+        <View style={[styles.flex, styles.container]}>
           <Button
             onPress={() => navigation.navigate('Main')}
             style={styles.button}

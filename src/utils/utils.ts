@@ -77,7 +77,7 @@ export const getCluster = (places, region) => {
       getZoomLevel(region.longitudeDelta),
     );
   } catch (e) {
-    console.debug('Failed to create cluster', e);
+    throw new Error(`Failed to create cluster (${e}).`);
   }
 
   return {

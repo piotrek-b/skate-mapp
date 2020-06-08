@@ -45,7 +45,6 @@ const SpotCard = ({ distance, spot }: ISpotCardProps) => {
         subtitle={`(${formatDistance(distance)})`}
         right={(props) => (
           <Button
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
             icon="navigation"
             onPress={() =>

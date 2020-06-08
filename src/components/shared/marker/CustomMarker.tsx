@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     transform: [{ rotate: '45deg' }],
+    borderWidth: 1,
   },
   childrenContainer: {
     transform: [{ rotate: '-45deg' }],
@@ -45,7 +46,6 @@ export default ({
           {
             width: markerSize,
             height: markerSize,
-            borderWidth: 1,
             borderColor,
             borderTopLeftRadius: markerSize / 2,
             borderTopRightRadius: markerSize / 2,
