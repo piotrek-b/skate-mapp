@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
-import { Chip } from 'react-native-paper';
+import { Chip, useTheme } from 'react-native-paper';
 
 import Longboard from '../Longboard';
 import { IState } from '../state/reducers';
@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
     elevation: 4,
     borderBottomRightRadius: 5,
     borderTopRightRadius: 5,
@@ -49,7 +48,6 @@ const styles = StyleSheet.create({
   },
   chip: {
     marginLeft: 10,
-    backgroundColor: '#fafafa',
   },
 });
 
@@ -64,6 +62,7 @@ const FIT_TO_COORDINATES_OPTIONS = {
 };
 
 export default ({ mapRef }: { mapRef: any }) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const spotsIds = useSelector((state: IState) => state.spots.allIds);
   const spotsById = useSelector((state: IState) => state.spots.byId);
@@ -101,7 +100,10 @@ export default ({ mapRef }: { mapRef: any }) => {
           return (
             <Chip
               key={category.id}
-              style={styles.chip}
+              style={[
+                styles.chip,
+                { backgroundColor: theme.colors.background },
+              ]}
               icon={({ color, size }) => (
                 <Longboard color={color} width={size} height={size} />
               )}

@@ -36,7 +36,6 @@ const facebookSignInEpic: Epic<IAccountAction, IAccountAction, IState> = (
     switchMap(() =>
       from(signInFacebook()).pipe(
         map(({ user }) => {
-          console.log('facebook', user);
           if (user) {
             return facebookSignInSucceeded(user);
           }
@@ -62,7 +61,6 @@ const googleSignInEpic: Epic<IAccountAction, IAccountAction, IState> = (
     switchMap(() =>
       from(signInGoogle()).pipe(
         map(({ user }) => {
-          console.log('facebook', user);
           if (user) {
             return googleSignInSucceeded(user);
           }

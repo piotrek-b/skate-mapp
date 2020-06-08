@@ -40,7 +40,6 @@ export default function accountReducer(
         break;
       }
       case AccountActionTypes.USER_DATA_UPDATED: {
-        console.log(action.payload);
         draft.data.name = action.payload.name;
         draft.data.picture = action.payload.picture;
         draft.data.uid = action.payload.uid;
@@ -54,7 +53,6 @@ export default function accountReducer(
         break;
       }
       case AccountActionTypes.SIGN_OUT_FAILED: {
-        console.log(action.payload);
         break;
       }
       case AccountActionTypes.CHECK_LOGIN_STATUS_SUCCEEDED: {

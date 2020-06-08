@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { Caption, Chip, Appbar } from 'react-native-paper';
+import { Caption, Chip, Appbar, useTheme } from 'react-native-paper';
 import { Dimensions, StyleSheet, View } from 'react-native';
 
 import { IState } from '../../state/reducers';
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   chip: {
     marginRight: 5,
     marginBottom: 5,
-    backgroundColor: '#fafafa',
   },
   flex: {
     display: 'flex',
@@ -49,6 +48,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const theme = useTheme();
   const navigation = useNavigation();
   const route = useRoute<ScreenRouteProp>();
   const [selectedCategoriesIds, setSelectedCategoriesIds] = useState(
@@ -74,9 +74,13 @@ export default () => {
                 key={category.id}
                 style={[
                   styles.chip,
-                  { backgroundColor: isSelected ? '#383d7f' : '#fafafa' },
+                  {
+                    backgroundColor: isSelected
+                      ? theme.colors.primary
+                      : theme.colors.background,
+                  },
                 ]}
-                selectedColor={isSelected ? '#fafafa' : null}
+                selectedColor={isSelected ? theme.colors.background : null}
                 icon={({ color, size }) => (
                   <Longboard color={color} width={size} height={size} />
                 )}

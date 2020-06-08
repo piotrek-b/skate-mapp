@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Container, View } from 'native-base';
 import { Dimensions, StyleSheet } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 
 import Map from './map/Map';
 import SelectedSpotCard from './SelectedSpotCard';
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const theme = useTheme();
   const spotLoadingSelector = createLoadingSelector(['ADD_SPOT']);
   const spotIsBeingAdded = useSelector((state: IState) =>
     spotLoadingSelector(state),
@@ -33,7 +34,7 @@ export default () => {
 
   const loadingComponent = spotIsBeingAdded ? (
     <View style={styles.activityIndicatorView}>
-      <ActivityIndicator size="large" color="#fff" />
+      <ActivityIndicator size="large" color={theme.colors.surface} />
     </View>
   ) : null;
 

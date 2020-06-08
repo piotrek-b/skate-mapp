@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { FAB } from 'react-native-paper';
+import { FAB, useTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { IState } from './state/reducers';
 
@@ -10,11 +10,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     paddingBottom: 68,
   },
-  starButton: {
-    backgroundColor: '#fff',
-  },
   locationButton: {
-    backgroundColor: '#fff',
     position: 'absolute',
     margin: 16,
     right: 0,
@@ -33,6 +29,7 @@ export default (
     onLocationButtonPress: () => {},
   },
 ) => {
+  const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const isFollowingLocation = useSelector(
     (state: IState) => state.currentLocation.following,
@@ -54,13 +51,18 @@ export default (
             },
           ]}
           onStateChange={() => setIsOpen(!isOpen)}
-          fabStyle={styles.starButton}
+          fabStyle={{ backgroundColor: theme.colors.surface }}
           style={styles.fabGroup}
         />
       ) : null}
       <FAB
-        color={isFollowingLocation ? '#383d7f' : '#888'}
-        style={styles.locationButton}
+        color={
+          isFollowingLocation ? theme.colors.primary : theme.colors.backdrop
+        }
+        style={[
+          styles.locationButton,
+          { backgroundColor: theme.colors.surface },
+        ]}
         icon="crosshairs-gps"
         onPress={onLocationButtonPress}
       />

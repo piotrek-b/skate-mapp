@@ -14,3 +14,6 @@ export const LatLngDeltaDefaults = {
   LATITUDE_DELTA: 0.005,
   LONGITUDE_DELTA: 0.005,
 };
+
+export const FACEBOOK_COLOR = '#3b5998';
+export const GOOGLE_COLOR = '#db4a39';

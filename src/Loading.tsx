@@ -2,13 +2,12 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 
-import { ActivityIndicator, Title } from 'react-native-paper';
+import { ActivityIndicator, Title, useTheme } from 'react-native-paper';
 import { checkLoginStatusRequested } from './state/actions/accountActions';
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: '#fff',
     display: 'flex',
     alignItems: 'center',
     alignContent: 'center',
@@ -20,6 +19,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const theme = useTheme();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,8 +28,8 @@ export default () => {
   }, []);
 
   return (
-    <View style={styles.view}>
-      <ActivityIndicator color="#383d7f" size="large" />
+    <View style={[styles.view, { backgroundColor: theme.colors.background }]}>
+      <ActivityIndicator color={theme.colors.primary} size="large" />
       <Title style={styles.title}>Loading....</Title>
     </View>
   );

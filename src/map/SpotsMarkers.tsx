@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Marker } from 'react-native-maps';
+import { useTheme } from 'react-native-paper';
 
 import { loadSpotsRequested } from '../state/actions/spotsActions';
 import Longboard from '../Longboard';
@@ -9,13 +10,13 @@ import { RegionContext } from './LocationBasedMapView';
 import { getCluster } from '../utils';
 import CountMarker from '../CountMarker';
 
-const renderMarker = (marker, index) => {
+const renderMarker = (marker, index, theme) => {
   const key = index + marker.geometry.coordinates[0];
 
   const children = marker.properties ? (
     <CountMarker
-      textColor="#383d7f"
-      markerColor="#fff"
+      textColor={theme.colors.primary}
+      markerColor={theme.colors.surface}
       count={marker.properties.point_count}
     />
   ) : (
@@ -23,8 +24,8 @@ const renderMarker = (marker, index) => {
       icon={({ color, size }) => (
         <Longboard color={color} width={size} height={size} />
       )}
-      iconColor="#383d7f"
-      markerColor="#fff"
+      iconColor={theme.colors.primary}
+      markerColor={theme.colors.surface}
     />
   );
 
@@ -43,6 +44,7 @@ const renderMarker = (marker, index) => {
 };
 
 export default () => {
+  const theme = useTheme();
   const region = useContext(RegionContext);
   const spotsIds = useSelector((state) => state.spots.allIds);
   const spotsById = useSelector((state) => state.spots.byId);
@@ -68,6 +70,10 @@ export default () => {
   const cluster = getCluster(allCoords, region);
 
   return (
-    <>{cluster.markers.map((marker, index) => renderMarker(marker, index))}</>
+    <>
+      {cluster.markers.map((marker, index) =>
+        renderMarker(marker, index, theme),
+      )}
+    </>
   );
 };

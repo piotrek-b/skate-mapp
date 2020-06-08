@@ -24,7 +24,6 @@ export default () => {
   let initialRouteName = null;
 
   if (loginStatusChecked && isSignedIn) {
-    console.log('Signed in');
     children = (
       <>
         <Stack.Screen name="Main" component={Main} />
@@ -36,7 +35,6 @@ export default () => {
     );
     initialRouteName = 'Main';
   } else if (loginStatusChecked && !isSignedIn) {
-    console.log('Not signed in');
     children = (
       <>
         <Stack.Screen name="Auth" component={Auth} />
@@ -45,7 +43,6 @@ export default () => {
     );
     initialRouteName = 'Auth';
   } else {
-    console.log('Loading');
     children = (
       <>
         <Stack.Screen name="Loading" component={Loading} />

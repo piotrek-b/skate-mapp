@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
     elevation: Platform.OS === 'ios' ? 1 : 4,
     borderBottomRightRadius: 5,
     borderTopRightRadius: 5,

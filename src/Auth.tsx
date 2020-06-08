@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, View, Image, Dimensions, Text } from 'react-native';
-import { Button, Caption } from 'react-native-paper';
+import { Button, Caption, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 // @ts-ignore
@@ -12,11 +12,11 @@ import {
   facebookSignInRequested,
   googleSignInRequested,
 } from './state/actions/accountActions';
+import { FACEBOOK_COLOR, GOOGLE_COLOR } from './consts';
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: '#fafafa',
   },
   container: {
     marginTop: 20,
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
 });
 
 export default () => {
+  const theme = useTheme();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const userData = useSelector((state: IState) => state.account.data);
@@ -46,7 +47,7 @@ export default () => {
   }
 
   return (
-    <View style={styles.view}>
+    <View style={[styles.view, { backgroundColor: theme.colors.background }]}>
       <Image
         style={{
           position: 'absolute',
@@ -61,7 +62,7 @@ export default () => {
         <View style={[styles.flex, styles.title]}>
           <Text
             style={{
-              color: '#fff',
+              color: theme.colors.surface,
               fontFamily: 'Pacifico',
               fontSize: 40,
             }}
@@ -73,7 +74,7 @@ export default () => {
           <Button
             icon="facebook"
             mode="contained"
-            color="#3B5998"
+            color={FACEBOOK_COLOR}
             onPress={() => dispatch(facebookSignInRequested())}
             style={styles.button}
           >
@@ -82,7 +83,7 @@ export default () => {
           <Button
             icon="google"
             mode="contained"
-            color="#DB4A39"
+            color={GOOGLE_COLOR}
             onPress={() => dispatch(googleSignInRequested())}
             style={styles.button}
           >
@@ -90,13 +91,13 @@ export default () => {
           </Button>
         </View>
         <View style={[styles.flex]}>
-          <Caption style={{ color: '#fff' }}>OR</Caption>
+          <Caption style={{ color: theme.colors.surface }}>OR</Caption>
         </View>
         <View style={[styles.flex, { marginTop: 20 }]}>
           <Button
             onPress={() => navigation.navigate('Main')}
             style={styles.button}
-            color="#fff"
+            color={theme.colors.surface}
           >
             Skip
           </Button>

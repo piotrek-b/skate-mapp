@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions, Image } from 'react-native';
-import { Divider, Menu } from 'react-native-paper';
+import { Divider, Menu, useTheme } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
@@ -34,6 +34,7 @@ const getImagePrettyName = (uri) => {
 };
 
 export default ({ error, value, onChange }: IAddImageListItemProps) => {
+  const theme = useTheme();
   const [menuOpened, setMenuOpened] = useState(false);
   const [cameraPermissionGranted, setCameraPermissionGrantedStatus] = useState(
     false,
@@ -65,7 +66,7 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
         onDismiss={() => setMenuOpened(false)}
         anchor={
           <ListItem
-            color={getItemColor(error, value !== '')}
+            color={getItemColor(error, value !== '', theme)}
             title={value ? getImagePrettyName(value) : 'Add Image'}
             icon="image"
             onPress={() => setMenuOpened(true)}

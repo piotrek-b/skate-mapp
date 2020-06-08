@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Marker } from 'react-native-maps';
-import { IconButton } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
 
 import UserPositionMarker from '../../map/UserPositionMarker';
 
@@ -22,6 +22,7 @@ type RouteParamsType = {
 type ScreenRouteProp = RouteProp<RouteParamsType, 'Params'>;
 
 export default () => {
+  const theme = useTheme();
   const navigation = useNavigation();
   const route = useRoute<ScreenRouteProp>();
   const mapRef = useRef(null);
@@ -29,6 +30,8 @@ export default () => {
     latitude: route.params.initialLatLng.latitude,
     longitude: route.params.initialLatLng.longitude,
   });
+
+  const locationIsSelected = latitude && longitude;
 
   return (
     <LocationBasedMapContainer mapRef={mapRef}>
@@ -51,19 +54,25 @@ export default () => {
           >
             <UserPositionMarker mapRef={mapRef} />
             <Marker coordinate={{ latitude, longitude }}>
-              <IconButton color="#fff" size={50} icon="map-marker-check" />
+              <IconButton
+                color={theme.colors.surface}
+                size={50}
+                icon="map-marker-check"
+              />
             </Marker>
           </LocationBasedMapView>
-          {latitude && longitude ? (
-            <MiddleBottomChip
-              onPress={() => {
+          <MiddleBottomChip
+            onPress={() => {
+              if (locationIsSelected) {
                 // @ts-ignore
                 route.params.onSelect({ latitude, longitude });
                 navigation.goBack();
-              }}
-              label="Save Location"
-            />
-          ) : null}
+              }
+            }}
+            label={
+              locationIsSelected ? 'Save location' : 'Click to select location'
+            }
+          />
         </>
       )}
     </LocationBasedMapContainer>

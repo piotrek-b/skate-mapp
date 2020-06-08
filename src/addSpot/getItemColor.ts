@@ -1,12 +1,12 @@
-const getItemColor = (error, hasValue) => {
+const getItemColor = (error, hasValue, theme) => {
   let color = null;
 
   if (error) {
-    color = '#B00020';
+    color = theme.colors.error;
   }
 
   if (hasValue) {
-    color = '#383d7f';
+    color = theme.colors.primary;
   }
 
   return color;

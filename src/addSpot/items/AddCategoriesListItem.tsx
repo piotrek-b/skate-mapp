@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { useTheme } from 'react-native-paper';
 
 import Longboard from '../../Longboard';
 import { IState } from '../../state/reducers';
@@ -14,11 +15,12 @@ interface IAddLocationListItemProps {
 }
 
 export default ({ error, value, onChange }: IAddLocationListItemProps) => {
+  const theme = useTheme();
   const navigation = useNavigation();
   const categoriesById = useSelector((state: IState) => state.categories.byId);
   return (
     <ListItem
-      color={getItemColor(error, value.length > 0)}
+      color={getItemColor(error, value.length > 0, theme)}
       title={
         value.length > 0
           ? value.map((id) => categoriesById[id].title).join(', ')

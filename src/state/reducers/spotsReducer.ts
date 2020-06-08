@@ -43,7 +43,6 @@ export default function spotsReducer(
         draft.allIds.push(action.payload.id);
         break;
       case SpotsActionTypes.ADD_SPOT_FAILED:
-        console.log(action);
         break;
       default:
         break;
