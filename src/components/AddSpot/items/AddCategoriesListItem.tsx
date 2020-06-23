@@ -7,14 +7,14 @@ import Longboard from '../../shared/Longboard';
 import { IState } from '../../../state/reducers';
 import ListItem from './ListItem';
 import getItemColor from '../getItemColor';
+import { RouteNames } from '../../../consts';
 
 interface IAddLocationListItemProps {
   error?: boolean;
   value: string[];
-  onChange: (value: string[]) => void;
 }
 
-export default ({ error, value, onChange }: IAddLocationListItemProps) => {
+export default ({ error, value }: IAddLocationListItemProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const categoriesById = useSelector((state: IState) => state.categories.byId);
@@ -30,8 +30,7 @@ export default ({ error, value, onChange }: IAddLocationListItemProps) => {
         <Longboard color={color} width={size} height={size} />
       )}
       onPress={() =>
-        navigation.navigate('AddCategories', {
-          onSelect: onChange,
+        navigation.navigate(RouteNames.ADD_CATEGORIES, {
           categoriesIds: value,
         })
       }

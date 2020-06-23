@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { FAB, useTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { IState } from '../../state/reducers';
+import { RouteNames } from '../../consts';
 
 const styles = StyleSheet.create({
   fabGroup: {
@@ -47,7 +48,16 @@ export default (
             {
               label: 'Add Spot',
               icon: 'map-marker-check',
-              onPress: () => navigation.navigate('AddSpot'),
+              onPress: () =>
+                navigation.navigate(RouteNames.ADD_SPOT, {
+                  categories: [],
+                  title: '',
+                  image: [],
+                  location: {
+                    latitude: 0,
+                    longitude: 0,
+                  },
+                }),
             },
           ]}
           onStateChange={() => setIsOpen(!isOpen)}

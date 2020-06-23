@@ -12,7 +12,7 @@ import {
   facebookSignInRequested,
   googleSignInRequested,
 } from '../../state/actions/accountActions';
-import { FACEBOOK_COLOR, GOOGLE_COLOR } from '../../consts';
+import { FACEBOOK_COLOR, GOOGLE_COLOR, RouteNames } from '../../consts';
 
 const styles = StyleSheet.create({
   view: {
@@ -105,7 +105,7 @@ export default () => {
         </View>
         <View style={[styles.flex, styles.container]}>
           <Button
-            onPress={() => navigation.navigate('Main')}
+            onPress={() => navigation.navigate(RouteNames.MAIN)}
             style={styles.button}
             color={theme.colors.surface}
           >

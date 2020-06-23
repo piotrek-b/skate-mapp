@@ -17,3 +17,13 @@ export const LatLngDeltaDefaults = {
 
 export const FACEBOOK_COLOR = '#3b5998';
 export const GOOGLE_COLOR = '#db4a39';
+
+export const RouteNames = {
+  LOADING: 'Loading',
+  AUTH: 'Auth',
+  MAIN: 'Main',
+  PROFILE: 'Profile',
+  ADD_SPOT: 'AddSpot',
+  ADD_LOCATION_MAP: 'AddLocationMap',
+  ADD_CATEGORIES: 'AddCategories',
+};

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, RouteProp } from '@react-navigation/native';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Divider, Snackbar } from 'react-native-paper';
 
@@ -11,6 +11,7 @@ import AddImageListItem from './items/AddImageListItem';
 import BottomButtons from '../shared/BottomButtons';
 import { addSpotRequested } from '../../state/actions/spotsActions';
 import { IState } from '../../state/reducers';
+import { RootStackParamList } from '../../types';
 
 const styles = StyleSheet.create({
   view: {
@@ -30,85 +31,95 @@ const styles = StyleSheet.create({
   },
 });
 
-export default () => {
+type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'AddSpot'>;
+
+interface AddSpotProps {
+  route: ProfileScreenRouteProp;
+}
+
+export default ({ route }: AddSpotProps) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [snackbarIsVisible, setSnackbarVisibility] = useState(false);
-  const [title, setTitle] = useState('');
-  const [location, setLocation] = useState({
-    latitude: 0,
-    longitude: 0,
-  });
-  const [categories, setCategories] = useState([]);
-  const [image, setImage] = useState('');
   const spotsIds = useSelector((state: IState) => state.spots.allIds);
   const uid = useSelector((state: IState) => state.account.data.uid);
+
+  const categories = route.params.categories || [];
+  const imageUri = route.params.imageUri || '';
+  const location = route.params.location || { latitude: 0, longitude: 0 };
+  const title = route.params.title || '';
+
+  const onLeftButtonPress = useCallback(() => {
+    navigation.setParams({
+      categories: [],
+      imageUri: '',
+      title: '',
+      location: { latitude: 0, longitude: 0 },
+    });
+  }, [navigation]);
+  const onRightButtonPress = useCallback(() => {
+    if (
+      !error &&
+      (title === '' ||
+        !location.latitude ||
+        !location.longitude ||
+        categories.length === 0 ||
+        imageUri.length === 0)
+    ) {
+      setError(true);
+      setSnackbarVisibility(true);
+    } else {
+      dispatch(
+        addSpotRequested({
+          author: uid,
+          id: `${spotsIds.length}`,
+          name: title,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          matching: categories,
+          imageUrl: imageUri,
+        }),
+      );
+      navigation.goBack();
+    }
+  }, [
+    uid,
+    error,
+    categories,
+    dispatch,
+    location.latitude,
+    location.longitude,
+    title,
+    imageUri,
+    navigation,
+    spotsIds.length,
+  ]);
 
   return (
     <View style={styles.view}>
       <View>
-        <AddSpotHeader
-          error={error && title === ''}
-          value={title}
-          onChange={({ nativeEvent }) => setTitle(nativeEvent.text)}
-        />
+        <AddSpotHeader error={error && title === ''} value={title} />
         <Divider />
         <AddLocationListItem
           error={error && (!location.latitude || !location.longitude)}
           value={location}
-          onChange={setLocation}
         />
         <Divider />
         <AddCategoriesListItem
           error={error && categories.length === 0}
           value={categories}
-          onChange={setCategories}
         />
         <Divider />
-        <AddImageListItem
-          error={error && image === ''}
-          value={image}
-          onChange={setImage}
-        />
+        <AddImageListItem error={error && imageUri === ''} value={imageUri} />
       </View>
       <BottomButtons
         leftProps={{
-          onPress: () => {
-            setTitle('');
-            setLocation({ latitude: 0, longitude: 0 });
-            setCategories([]);
-            setImage('');
-          },
+          onPress: onLeftButtonPress,
         }}
         rightProps={{
           disabled: error,
-          onPress: () => {
-            if (
-              !error &&
-              (title === '' ||
-                !location.latitude ||
-                !location.longitude ||
-                categories.length === 0 ||
-                image.length === 0)
-            ) {
-              setError(true);
-              setSnackbarVisibility(true);
-            } else {
-              dispatch(
-                addSpotRequested({
-                  author: uid,
-                  id: `${spotsIds.length}`,
-                  name: title,
-                  latitude: location.latitude,
-                  longitude: location.longitude,
-                  matching: categories,
-                  imageUrl: image,
-                }),
-              );
-              navigation.goBack();
-            }
-          },
+          onPress: onRightButtonPress,
         }}
       />
       <Snackbar

@@ -41,6 +41,7 @@ const Routes: IRoute[] = [
   },
   {
     name: 'AddSpot',
+    // @ts-ignore
     component: AddSpot,
     forSignedInUser: true,
     forAnonymousUser: false,

@@ -11,6 +11,7 @@ import {
   parseNominatimResponseToBoxCoordinates,
 } from '../../../utils/utils';
 import { IState } from '../../../state/reducers';
+import { RouteNames } from '../../../consts';
 
 const SearchBarStylesConsts = {
   top: 40,
@@ -70,7 +71,7 @@ export default ({ mapRef }: { mapRef: any }) => {
       <Surface
         style={styles.searchBarEnd}
         onTouchStart={() =>
-          navigation.navigate(isSignedIn ? 'Profile' : 'Auth')
+          navigation.navigate(isSignedIn ? RouteNames.PROFILE : RouteNames.AUTH)
         }
       >
         {isSignedIn && userData.picture ? (

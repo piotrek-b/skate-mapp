@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 
@@ -8,6 +8,7 @@ import {
 } from '../../../utils/utils';
 import ListItem from './ListItem';
 import getItemColor from '../getItemColor';
+import { RouteNames } from '../../../consts';
 
 interface ILatLng {
   latitude: number;
@@ -17,13 +18,20 @@ interface ILatLng {
 interface IAddLocationListItemProps {
   error?: boolean;
   value: ILatLng;
-  onChange: (latLng: ILatLng) => void;
 }
 
-export default ({ error, value, onChange }: IAddLocationListItemProps) => {
+export default ({ error, value }: IAddLocationListItemProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const [name, setName] = useState('');
+
+  const onAddLocationListItemPress = useCallback(
+    () =>
+      navigation.navigate(RouteNames.ADD_LOCATION_MAP, {
+        initialLatLng: value,
+      }),
+    [navigation, value],
+  );
 
   useEffect(() => {
     const callback = async () => {
@@ -44,12 +52,7 @@ export default ({ error, value, onChange }: IAddLocationListItemProps) => {
       color={getItemColor(error, value.latitude && value.longitude, theme)}
       title={value.longitude && value.latitude ? name : 'Add Location'}
       icon="map-marker"
-      onPress={() =>
-        navigation.navigate('AddLocationMap', {
-          onSelect: onChange,
-          initialLatLng: value,
-        })
-      }
+      onPress={onAddLocationListItemPress}
     />
   );
 };

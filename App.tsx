@@ -9,7 +9,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import Firebase from './src/utils/firebase/Firebase';
 
 import store from './src/state/store';
-import AppContainer from './src/components/AppContainer';
+import AppNavigation from './src/components/AppNavigation';
 
 const theme = {
   ...DefaultTheme,
@@ -59,7 +59,7 @@ export default () => {
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
-        <AppContainer />
+        <AppNavigation />
       </PaperProvider>
     </Provider>
   );

@@ -28,10 +28,9 @@ const styles = StyleSheet.create({
 interface IAddSpotHeaderProps {
   error?: boolean;
   value: string;
-  onChange: (event: any) => void;
 }
 
-export default ({ error, value, onChange }: IAddSpotHeaderProps) => {
+export default ({ error, value }: IAddSpotHeaderProps) => {
   const navigation = useNavigation();
 
   return (
@@ -46,7 +45,11 @@ export default ({ error, value, onChange }: IAddSpotHeaderProps) => {
         style={styles.titleInput}
         placeholder="Add Title"
         value={value}
-        onChange={onChange}
+        onChange={({ nativeEvent }) =>
+          navigation.setParams({
+            title: nativeEvent.text,
+          })
+        }
       />
     </View>
   );

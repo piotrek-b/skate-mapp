@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Divider, Menu, useTheme } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -23,7 +24,6 @@ const styles = StyleSheet.create({
 interface IAddImageListItemProps {
   error?: boolean;
   value: string;
-  onChange: (event: any) => void;
 }
 
 const getImagePrettyName = (uri) => {
@@ -33,7 +33,8 @@ const getImagePrettyName = (uri) => {
   return `Cover.${extension}`;
 };
 
-export default ({ error, value, onChange }: IAddImageListItemProps) => {
+export default ({ error, value }: IAddImageListItemProps) => {
+  const navigation = useNavigation();
   const theme = useTheme();
   const [menuOpened, setMenuOpened] = useState(false);
   const [cameraPermissionGranted, setCameraPermissionGrantedStatus] = useState(
@@ -51,13 +52,75 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
         });
 
         if (!result.cancelled) {
-          onChange(result.uri);
+          navigation.setParams({
+            imageUri: result.uri,
+          });
         }
       }
     };
 
     callback();
-  }, [cameraPermissionGranted, onChange]);
+  }, [cameraPermissionGranted, navigation]);
+
+  const onUseGalleryPress = useCallback(() => {
+    const callback = async () => {
+      setMenuOpened(false);
+      const result: any = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.3,
+      });
+
+      if (!result.cancelled) {
+        navigation.setParams({
+          imageUri: result.uri,
+        });
+      }
+    };
+
+    callback();
+  }, [navigation]);
+
+  const onUseCameraPress = useCallback(() => {
+    const callback = async () => {
+      setMenuOpened(false);
+
+      if (!cameraPermissionGranted) {
+        const { status } = await Permissions.askAsync(
+          Permissions.CAMERA,
+          Permissions.CAMERA_ROLL,
+        );
+        if (status === 'granted') {
+          setCameraPermissionGrantedStatus(true);
+        }
+      }
+
+      if (cameraPermissionGranted) {
+        const result: any = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 0.3,
+        });
+
+        if (!result.cancelled) {
+          navigation.setParams({
+            imageUri: result.uri,
+          });
+        }
+      }
+    };
+
+    callback();
+  }, [cameraPermissionGranted, navigation]);
+
+  const onDeletePhotoPress = useCallback(() => {
+    setMenuOpened(false);
+    navigation.setParams({
+      imageUri: '',
+    });
+  }, [navigation]);
 
   return (
     <>
@@ -73,61 +136,12 @@ export default ({ error, value, onChange }: IAddImageListItemProps) => {
           />
         }
       >
-        <Menu.Item
-          onPress={async () => {
-            setMenuOpened(false);
-            const result: any = await ImagePicker.launchImageLibraryAsync({
-              mediaTypes: ImagePicker.MediaTypeOptions.Images,
-              allowsEditing: true,
-              aspect: [4, 3],
-              quality: 0.3,
-            });
-
-            if (!result.cancelled) {
-              onChange(result.uri);
-            }
-          }}
-          title="Use gallery"
-        />
-        <Menu.Item
-          onPress={async () => {
-            setMenuOpened(false);
-
-            if (!cameraPermissionGranted) {
-              const { status } = await Permissions.askAsync(
-                Permissions.CAMERA,
-                Permissions.CAMERA_ROLL,
-              );
-              if (status === 'granted') {
-                setCameraPermissionGrantedStatus(true);
-              }
-            }
-
-            if (cameraPermissionGranted) {
-              const result: any = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 0.3,
-              });
-
-              if (!result.cancelled) {
-                onChange(result.uri);
-              }
-            }
-          }}
-          title="Use camera"
-        />
+        <Menu.Item onPress={onUseGalleryPress} title="Use gallery" />
+        <Menu.Item onPress={onUseCameraPress} title="Use camera" />
         {!!value && (
           <>
             <Divider />
-            <Menu.Item
-              onPress={() => {
-                setMenuOpened(false);
-                onChange('');
-              }}
-              title="Delete Photo"
-            />
+            <Menu.Item onPress={onDeletePhotoPress} title="Delete Photo" />
           </>
         )}
       </Menu>

@@ -1,5 +1,11 @@
-import React, { useRef, useState } from 'react';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  useNavigation,
+  useRoute,
+  RouteProp,
+  NavigationState,
+  CommonActions,
+} from '@react-navigation/native';
 import { Marker } from 'react-native-maps';
 import { IconButton, useTheme } from 'react-native-paper';
 
@@ -8,7 +14,7 @@ import UserPositionMarker from '../../shared/map/UserPositionMarker';
 import LocationBasedMapContainer from '../../shared/map/LocationBasedMapContainer';
 import LocationBasedMapView from '../../shared/map/LocationBasedMapView';
 import MiddleBottomChip from '../../shared/MiddleBottomChip';
-import { LatLngDeltaDefaults } from '../../../consts';
+import { LatLngDeltaDefaults, RouteNames } from '../../../consts';
 
 type RouteParamsType = {
   Params: {
@@ -33,6 +39,38 @@ export default () => {
 
   const locationIsSelected = latitude && longitude;
 
+  const onMiddleChipPress = useCallback(() => {
+    if (locationIsSelected) {
+      navigation.dispatch((state: NavigationState) => {
+        const routes = state.routes.filter(
+          (r) => r.name !== RouteNames.ADD_CATEGORIES,
+        );
+        const lastRoute = routes[routes.length - 1];
+        lastRoute.params = {
+          ...lastRoute.params,
+          location: { latitude, longitude },
+        };
+
+        return CommonActions.reset({
+          ...state,
+          stale: true,
+          routes,
+          index: routes.length - 1,
+        });
+      });
+    }
+  }, [latitude, longitude, locationIsSelected, navigation]);
+
+  const onMapViewPress = useCallback(({ nativeEvent }) => {
+    mapRef.current.animateToRegion({
+      latitude: nativeEvent.coordinate.latitude,
+      longitude: nativeEvent.coordinate.longitude,
+      latitudeDelta: LatLngDeltaDefaults.LATITUDE_DELTA,
+      longitudeDelta: LatLngDeltaDefaults.LONGITUDE_DELTA,
+    });
+    setLatLng({ ...nativeEvent.coordinate });
+  }, []);
+
   return (
     <LocationBasedMapContainer mapRef={mapRef}>
       {({ initialLatitude, initialLongitude }) => (
@@ -41,15 +79,7 @@ export default () => {
             mapRef={mapRef}
             initialLatitude={latitude || initialLatitude}
             initialLongitude={longitude || initialLongitude}
-            onPress={({ nativeEvent }) => {
-              mapRef.current.animateToRegion({
-                latitude: nativeEvent.coordinate.latitude,
-                longitude: nativeEvent.coordinate.longitude,
-                latitudeDelta: LatLngDeltaDefaults.LATITUDE_DELTA,
-                longitudeDelta: LatLngDeltaDefaults.LONGITUDE_DELTA,
-              });
-              setLatLng({ ...nativeEvent.coordinate });
-            }}
+            onPress={onMapViewPress}
             onMarkerPress={() => {}}
           >
             <UserPositionMarker mapRef={mapRef} />
@@ -62,13 +92,7 @@ export default () => {
             </Marker>
           </LocationBasedMapView>
           <MiddleBottomChip
-            onPress={() => {
-              if (locationIsSelected) {
-                // @ts-ignore
-                route.params.onSelect({ latitude, longitude });
-                navigation.goBack();
-              }
-            }}
+            onPress={onMiddleChipPress}
             label={
               locationIsSelected ? 'Save location' : 'Click to select location'
             }

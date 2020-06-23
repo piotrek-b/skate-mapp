@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  RouteProp,
+  CommonActions,
+  NavigationState,
+} from '@react-navigation/native';
 import { Caption, Chip, Appbar, useTheme } from 'react-native-paper';
 import { Dimensions, StyleSheet, View } from 'react-native';
 
@@ -57,6 +63,41 @@ export default () => {
   const categoriesById = useSelector((state: IState) => state.categories.byId);
   const categoriesIds = useSelector((state: IState) => state.categories.ids);
 
+  const onRightButtonPress = useCallback(() => {
+    navigation.dispatch((state: NavigationState) => {
+      const routes = state.routes.filter((r) => r.name !== 'AddCategories');
+      const lastRoute = routes[routes.length - 1];
+      lastRoute.params = {
+        ...lastRoute.params,
+        categories: selectedCategoriesIds,
+      };
+
+      return CommonActions.reset({
+        ...state,
+        stale: true,
+        routes,
+        index: routes.length - 1,
+      });
+    });
+  }, [navigation, selectedCategoriesIds]);
+  const onLeftButtonPress = useCallback(() => {
+    setSelectedCategoriesIds([]);
+  }, []);
+  const onChipPress = useCallback(
+    (isSelected, category) => {
+      if (isSelected) {
+        setSelectedCategoriesIds(
+          selectedCategoriesIds.filter(
+            (selectedCategoryId) => selectedCategoryId !== category.id,
+          ),
+        );
+      } else {
+        setSelectedCategoriesIds([...selectedCategoriesIds, category.id]);
+      }
+    },
+    [selectedCategoriesIds],
+  );
+
   return (
     <View style={styles.view}>
       <Appbar.Header>
@@ -84,21 +125,7 @@ export default () => {
                 icon={({ color, size }) => (
                   <Longboard color={color} width={size} height={size} />
                 )}
-                onPress={() => {
-                  if (isSelected) {
-                    setSelectedCategoriesIds(
-                      selectedCategoriesIds.filter(
-                        (selectedCategoryId) =>
-                          selectedCategoryId !== category.id,
-                      ),
-                    );
-                  } else {
-                    setSelectedCategoriesIds([
-                      ...selectedCategoriesIds,
-                      category.id,
-                    ]);
-                  }
-                }}
+                onPress={() => onChipPress(isSelected, category)}
                 selected={isSelected}
               >
                 {category.title}
@@ -109,14 +136,10 @@ export default () => {
       </View>
       <BottomButtons
         leftProps={{
-          onPress: () => setSelectedCategoriesIds([]),
+          onPress: onLeftButtonPress,
         }}
         rightProps={{
-          onPress: () => {
-            // @ts-ignore
-            route.params.onSelect(selectedCategoriesIds);
-            navigation.goBack();
-          },
+          onPress: onRightButtonPress,
         }}
       />
     </View>
