@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import 'react-native-gesture-handler';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import Firebase from './src/utils/firebase/Firebase';
+import './timers';
 
 import store from './src/state/store';
 import AppNavigation from './src/components/AppNavigation';
